@@ -1,5 +1,5 @@
-import { SpellingApp } from "./components/SpellingApp";
+import HomePage from "./HomePage";
 
 export default function Home() {
-  return <SpellingApp />;
+  return <HomePage />;
 }

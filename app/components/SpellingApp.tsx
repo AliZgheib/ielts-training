@@ -3,32 +3,9 @@ import React, { useEffect } from "react";
 import { Round } from "./Round";
 import { DictateRound, WordType } from "./DictateRound";
 import { SpeechContext } from "./SpeechContext";
+import { wordSets, categories } from "./wordSets";
 
-const demoWords = [
-  "beautiful",
-  "didactic",
-  "esteem",
-  "Unfortunately",
-  "curiosity",
-  "believe",
-  "Interesting",
-  "quickly",
-  "processor",
-  "Rabbit",
-  "cancelled",
-  "inspiration",
-  "Possibly",
-  "especially",
-  "improvement",
-  "existing",
-  "happening",
-  "allowed",
-  "behavior",
-  "crucial",
-  "Existing",
-  "stretch",
-  "shuffle",
-].map((w) => w.toLocaleLowerCase());
+const defaultSet = wordSets.find((s) => s.id === "all")!;
 
 const typeMap: Record<string, WordType> = {
   letters: WordType.Letters,
@@ -50,13 +27,18 @@ function getSpeech(): Promise<SpeechSynthesisVoice[]> {
   });
 }
 
-export const SpellingApp = () => {
+type SpellingAppProps = {
+  mode?: "spelling" | "dictation";
+};
+
+export const SpellingApp = ({ mode }: SpellingAppProps) => {
   const [dictateSet, setDictateSet] = React.useState<string>("letters");
   const [playing, setPlaying] = React.useState(false);
   const [rate, setRate] = React.useState(1);
   const [length, setLength] = React.useState(6);
   const [dictate, setDictate] = React.useState(false);
-  const [words, setWords] = React.useState(demoWords);
+  const [selectedSetId, setSelectedSetId] = React.useState(defaultSet.id);
+  const [words, setWords] = React.useState(defaultSet.words);
   const [results, setResults] = React.useState<
     undefined | { word: string; failedAttempts: number }[]
   >(undefined);
@@ -110,13 +92,47 @@ export const SpellingApp = () => {
     );
   }
 
+  const showSpelling = !mode || mode === "spelling";
+  const showDictation = !mode || mode === "dictation";
+
   return (
-    <div className="absolute inset-[10px] flex flex-row justify-around">
-      {/* Left panel: Practice spelling */}
+    <div className={`p-4 flex ${showSpelling && showDictation ? "flex-row justify-around" : "flex-col items-center"}`}>
+      {showSpelling && (
+      /* Left panel: Practice spelling */
       <div className="flex flex-col items-start">
         <div className="m-[10px] text-[25px] font-semibold">
           Practice spelling:
         </div>
+
+        {/* Word Set Selector */}
+        <div className="mx-[10px] mb-2 w-[250px]">
+          <label className="text-sm font-medium block mb-1">Word Set:</label>
+          <select
+            className="w-full border border-gray-300 rounded p-2 text-sm"
+            value={selectedSetId}
+            onChange={(e) => {
+              const set = wordSets.find((s) => s.id === e.target.value);
+              if (set) {
+                setSelectedSetId(set.id);
+                setWords(set.words);
+                setResults(undefined);
+              }
+            }}
+          >
+            {categories.map((cat) => (
+              <optgroup key={cat} label={cat}>
+                {wordSets
+                  .filter((s) => s.category === cat)
+                  .map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} ({s.words.length} words)
+                    </option>
+                  ))}
+              </optgroup>
+            ))}
+          </select>
+        </div>
+
         {results &&
           results.map((r, i) => (
             <div key={i} className="px-[10px] text-sm">
@@ -140,8 +156,10 @@ export const SpellingApp = () => {
           Start
         </button>
       </div>
+      )}
 
-      {/* Right panel: Practice dictation */}
+      {showDictation && (
+      /* Right panel: Practice dictation */
       <div className="flex flex-col items-center">
         <div className="m-[10px] text-[25px] font-semibold">
           Practice writing down when dictated:
@@ -227,6 +245,7 @@ export const SpellingApp = () => {
           Start
         </button>
       </div>
+      )}
     </div>
   );
 };
