@@ -5,7 +5,7 @@ import "react-simple-keyboard/build/css/index.css";
 import { WordRow, LetterType } from "./LetterRow";
 import { SpeechContext } from "./SpeechContext";
 
-const abc = "abcdefghijklmnopqrstuvwxyz0123456789".split("");
+const abc = "abcdefghijklmnopqrstuvwxyz0123456789-".split("");
 
 type WordRoundProps = {
   rate?: number;
