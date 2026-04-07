@@ -322,6 +322,21 @@ export const wordSets: WordSet[] = [
     ],
   },
 
+  {
+    id: "plural-f-fe",
+    name: "Plural -f/-fe to -ves",
+    category: "Spelling Practice",
+    words: [
+      "knife", "knives", "life", "lives", "wife", "wives", "leaf",
+      "leaves", "wolf", "wolves", "thief", "thieves", "shelf",
+      "shelves", "half", "halves", "loaf", "loaves", "roof", "roofs",
+      "chief", "chiefs", "belief", "beliefs", "giraffe", "giraffes",
+      "chef", "chefs", "scarf", "scarfs", "scarves", "dwarf", "dwarfs",
+      "dwarves", "hoof", "hoofs", "hooves", "cliff", "cliffs", "staff",
+      "staffs",
+    ],
+  },
+
   // ==========================================
   // YOUR PERSONAL WORDS (from words-2.txt)
   // ==========================================
