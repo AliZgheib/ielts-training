@@ -338,6 +338,47 @@ export const wordSets: WordSet[] = [
   },
 
   // ==========================================
+  // ENGLISH NAMES
+  // ==========================================
+  {
+    id: "first-names",
+    name: "First Names",
+    category: "Names",
+    words: [
+      "alexander", "alice", "amanda", "andrew", "angela", "anthony",
+      "barbara", "benjamin", "bridget", "catherine", "charlotte", "christopher",
+      "daniel", "deborah", "diana", "dorothy", "douglas", "edward", "elizabeth",
+      "emily", "emma", "eugene", "florence", "francis", "frederick",
+      "geoffrey", "george", "gerald", "graham", "hannah", "harriet",
+      "henry", "hugh", "isabel", "jacqueline", "james", "janet", "jennifer",
+      "jessica", "jonathan", "joseph", "judith", "katherine", "lawrence",
+      "leonard", "lewis", "louise", "lucy", "margaret", "martin", "matthew",
+      "michael", "natalie", "nathaniel", "nicholas", "oliver", "patricia",
+      "patrick", "pauline", "penelope", "peter", "philip", "rachel",
+      "rebecca", "richard", "robert", "rosemary", "ruth", "samuel",
+      "sarah", "sebastian", "simon", "sophie", "stephen", "stuart",
+      "susan", "suzanne", "theresa", "thomas", "timothy", "victoria", "vincent",
+      "virginia", "william",
+    ],
+  },
+  {
+    id: "surnames",
+    name: "Surnames",
+    category: "Names",
+    words: [
+      "anderson", "armstrong", "bailey", "baker", "bennett", "campbell",
+      "carpenter", "chandler", "clarke", "collins", "crawford", "cunningham",
+      "davidson", "edwards", "fitzgerald", "fletcher", "gallagher", "gibson",
+      "griffiths", "hamilton", "harrison", "henderson", "jackson", "jefferson",
+      "johnson", "kennedy", "lambert", "mackenzie", "marshall", "mitchell",
+      "morrison", "murray", "nicholson", "o'brien", "palmer", "patel",
+      "pemberton", "phillips", "robertson", "robinson", "sanders", "shepherd",
+      "simpson", "sinclair", "sullivan", "thompson", "thornton", "wallace",
+      "whitfield", "williams", "worthington", "wright",
+    ],
+  },
+
+  // ==========================================
   // YOUR PERSONAL WORDS (from words-2.txt)
   // ==========================================
   {
@@ -356,7 +397,7 @@ export const wordSets: WordSet[] = [
       "incineration", "laboratory", "leisure", "livestock", "lounge",
       "manuscript", "midday", "mortgage", "motto", "museum", "niece", "non-refundable",
       "pavements", "pedestrians", "pharaoh", "physics", "postbox", "potassium",
-      "poultry", "pronounce", "pronunciation", "psychology", "rainwear", "rural",
+      "poultry", "pronounce", "pronunciation", "psychology", "raincoat", "rainwear", "rural",
       "sable", "seasick", "sneakers", "speech", "speeches", "standardization",
       "subsoil", "sunshade", "swallowing", "taps", "teeming", "temporarily",
       "tennis", "thesis", "topsoil", "trainers", "trivial", "umbrella", "urban",
