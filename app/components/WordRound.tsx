@@ -29,7 +29,6 @@ export const WordRound = ({
   const ref = React.useRef<any>(null);
 
   const [buffer, setBuffer] = React.useState("");
-  const position = buffer.length;
 
   const speechLang = React.useContext(SpeechContext);
   React.useEffect(() => {
@@ -49,78 +48,68 @@ export const WordRound = ({
   }, [rate, sayWord, targetWord, speechLang]);
 
   React.useEffect(() => {
-    const key = targetWord.split("")[position];
-    if (ref.current) {
-      abc
-        .filter((char) => char !== key)
-        .forEach((char) =>
-          ref.current.physicalKeyboard.handleHighlightKeyUp({
-            key: char,
-            code: "key",
-          })
-        );
-      ref.current.physicalKeyboard.handleHighlightKeyDown({
-        key,
-        code: "key",
-      });
-    }
-  }, [position, targetWord, sayWord, rate]);
-
-  React.useEffect(() => {
     const onKey = ({ key }: any) => {
-      if (abc.includes(key)) {
-        const targetKey = targetWord.split("")[position];
-        if (targetKey === key) {
-          if (position === targetWord.length - 1) {
-            onSuccess();
-          } else {
-            setBuffer((p) => p + key);
-          }
+      if (key === "Enter") {
+        if (buffer.length === 0) return;
+        if (buffer === targetWord) {
+          onSuccess();
         } else {
-          onFail(buffer + key);
+          onFail(buffer);
         }
+      } else if (key === "Backspace") {
+        setBuffer((p) => p.slice(0, -1));
+      } else if (abc.includes(key)) {
+        setBuffer((p) => p + key);
       }
     };
     window.addEventListener("keyup", onKey);
     return () => {
       window.removeEventListener("keyup", onKey);
     };
-  }, [onFail, onSuccess, position, targetWord, setBuffer, buffer, sayWord]);
+  }, [onFail, onSuccess, targetWord, setBuffer, buffer, sayWord]);
 
-  const highlightPosition = !commonErrorWord
-    ? undefined
-    : targetWord
-        .split("")
-        .findIndex(
-          (targetChar, targetIndex) =>
-            commonErrorWord.split("")[targetIndex] !== targetChar
-        );
+  // Build display: show typed characters, and in non-blind mode also show the target
+  const typedLetters = buffer.split("").map((char, index) => {
+    if (!blind) {
+      // In play mode (after failure): color letters green/red vs target
+      const targetChar = targetWord[index];
+      return {
+        char,
+        type: char === targetChar ? LetterType.Correct : LetterType.Highlight,
+      };
+    }
+    return { char, type: LetterType.Correct };
+  });
+
+  const targetLetters = targetWord.split("").map((char, index) => {
+    const typedChar = buffer[index];
+    if (typedChar === char) {
+      return { char, type: LetterType.Correct };
+    } else if (typedChar !== undefined) {
+      return { char, type: LetterType.Highlight };
+    } else {
+      return { char, type: LetterType.Faded };
+    }
+  });
 
   return (
     <div className="absolute w-full h-full flex flex-col items-center">
+      {!blind && (
+        <div className="flex flex-row m-[10px]">
+          <WordRow word={targetLetters} />
+        </div>
+      )}
       <div className="flex flex-row m-[10px]">
         <WordRow
-          word={targetWord.split("").map((char, index) => {
-            if (
-              !blind &&
-              highlightPosition !== undefined &&
-              index === highlightPosition &&
-              index >= position
-            ) {
-              return {
-                char,
-                type: LetterType.Highlight,
-              };
-            } else if (blind && !(index < position)) {
-              return undefined;
-            } else {
-              return {
-                char,
-                type: index < position ? LetterType.Correct : LetterType.Faded,
-              };
-            }
-          })}
+          word={
+            typedLetters.length > 0
+              ? typedLetters
+              : [{ char: "_", type: LetterType.Faded }]
+          }
         />
+      </div>
+      <div className="text-sm text-gray-400 mt-2">
+        Press Enter to submit
       </div>
       {!blind && (
         <div className="pt-[80px] px-[80px] self-stretch">
