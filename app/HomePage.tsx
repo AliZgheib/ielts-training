@@ -1,6 +1,9 @@
 "use client";
 import React from "react";
 import { SpellingApp } from "./components/SpellingApp";
+import { TenseDrill } from "./components/TenseDrill";
+import { SubjectVerbDrill } from "./components/SubjectVerbDrill";
+import { TrendVocabDrill } from "./components/TrendVocabDrill";
 
 type Skill = {
   id: string;
@@ -23,6 +26,27 @@ const skills: Skill[] = [
     title: "Dictation Practice",
     description: "Listen and type letters, numbers, or alpha-numeric sequences. Adjust speed and length.",
     icon: "🎧",
+    available: true,
+  },
+  {
+    id: "tense-drill",
+    title: "Tense Picker",
+    description: "Pick the correct tense for Task 1 sentences. Covers past simple, present perfect, and present simple.",
+    icon: "⏰",
+    available: true,
+  },
+  {
+    id: "subject-verb",
+    title: "Subject-Verb Agreement",
+    description: "Choose the right verb form. Tricky subjects like 'the number of' and long noun phrases.",
+    icon: "🔗",
+    available: true,
+  },
+  {
+    id: "trend-vocab",
+    title: "Trend Vocabulary",
+    description: "Learn synonyms for increase, decrease, stable, and more. Classify words or recall from memory.",
+    icon: "📈",
     available: true,
   },
 ];
@@ -60,6 +84,57 @@ export default function HomePage() {
           <h1 className="text-lg font-semibold">Dictation Practice</h1>
         </nav>
         <SpellingApp mode="dictation" />
+      </div>
+    );
+  }
+
+  if (activeSkill === "tense-drill") {
+    return (
+      <div className="min-h-screen">
+        <nav className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-4">
+          <button
+            onClick={() => setActiveSkill(null)}
+            className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+          >
+            ← Back
+          </button>
+          <h1 className="text-lg font-semibold">Tense Picker</h1>
+        </nav>
+        <TenseDrill />
+      </div>
+    );
+  }
+
+  if (activeSkill === "subject-verb") {
+    return (
+      <div className="min-h-screen">
+        <nav className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-4">
+          <button
+            onClick={() => setActiveSkill(null)}
+            className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+          >
+            ← Back
+          </button>
+          <h1 className="text-lg font-semibold">Subject-Verb Agreement</h1>
+        </nav>
+        <SubjectVerbDrill />
+      </div>
+    );
+  }
+
+  if (activeSkill === "trend-vocab") {
+    return (
+      <div className="min-h-screen">
+        <nav className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-4">
+          <button
+            onClick={() => setActiveSkill(null)}
+            className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+          >
+            ← Back
+          </button>
+          <h1 className="text-lg font-semibold">Trend Vocabulary</h1>
+        </nav>
+        <TrendVocabDrill />
       </div>
     );
   }
