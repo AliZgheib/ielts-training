@@ -246,7 +246,7 @@ function RecallGame() {
 
       {/* Type filter */}
       <div className="flex gap-2 mb-6">
-        {["all", "verb", "noun", "adjective", "adverb"].map((t) => (
+        {["all", "verb", "noun"].map((t) => (
           <button
             key={t}
             onClick={() => {
