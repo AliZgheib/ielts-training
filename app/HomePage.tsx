@@ -4,6 +4,7 @@ import { SpellingApp } from "./components/SpellingApp";
 import { TenseDrill } from "./components/TenseDrill";
 import { SubjectVerbDrill } from "./components/SubjectVerbDrill";
 import { TrendVocabDrill } from "./components/TrendVocabDrill";
+import { SentenceBuilderDrill } from "./components/SentenceBuilderDrill";
 
 type Skill = {
   id: string;
@@ -47,6 +48,13 @@ const skills: Skill[] = [
     title: "Trend Vocabulary",
     description: "Learn synonyms for increase, decrease, stable, and more. Classify words or recall from memory.",
     icon: "📈",
+    available: true,
+  },
+  {
+    id: "sentence-builder",
+    title: "Sentence Builder",
+    description: "Chain data points with connectors like 'before dipping', ', reaching', and 'after which'. Write smooth Band 7 sentences.",
+    icon: "🔗",
     available: true,
   },
 ];
@@ -135,6 +143,23 @@ export default function HomePage() {
           <h1 className="text-lg font-semibold">Trend Vocabulary</h1>
         </nav>
         <TrendVocabDrill />
+      </div>
+    );
+  }
+
+  if (activeSkill === "sentence-builder") {
+    return (
+      <div className="min-h-screen">
+        <nav className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-4">
+          <button
+            onClick={() => setActiveSkill(null)}
+            className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+          >
+            ← Back
+          </button>
+          <h1 className="text-lg font-semibold">Sentence Builder</h1>
+        </nav>
+        <SentenceBuilderDrill />
       </div>
     );
   }
