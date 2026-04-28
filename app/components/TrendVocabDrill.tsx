@@ -218,7 +218,21 @@ function RecallGame() {
     (w) =>
       w.direction === dir && (filterType === "all" || w.type === filterType)
   );
-  const matchingNormalized = useMemo(
+  // Map every accepted form (primary + alternates) to the primary normalized word
+  const guessToKey = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const w of matching) {
+      const key = normalize(w.word);
+      m.set(key, key);
+      if (w.alternates) {
+        for (const alt of w.alternates) {
+          m.set(normalize(alt), key);
+        }
+      }
+    }
+    return m;
+  }, [matching]);
+  const keyToWord = useMemo(
     () => new Map(matching.map((w) => [normalize(w.word), w])),
     [matching]
   );
@@ -228,14 +242,15 @@ function RecallGame() {
     const guess = normalize(input);
     if (!guess) return;
 
-    if (found.has(guess)) {
+    if (found.has(guess) || [...found].some((f) => guessToKey.get(guess) === f)) {
       // already found, just clear
       setInput("");
       return;
     }
 
-    if (matchingNormalized.has(guess)) {
-      setFound((prev) => new Set([...prev, guess]));
+    const key = guessToKey.get(guess);
+    if (key) {
+      setFound((prev) => new Set([...prev, key]));
     } else {
       setWrongGuesses((prev) =>
         prev.includes(guess) ? prev : [...prev, input.trim()]
@@ -337,7 +352,7 @@ function RecallGame() {
         {found.size > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
             {[...found].map((g) => {
-              const w = matchingNormalized.get(g)!;
+              const w = keyToWord.get(g)!;
               return (
                 <span
                   key={g}
