@@ -137,7 +137,7 @@ export function SubjectVerbDrill() {
               {part}
               {i < arr.length - 1 && (
                 <span className="inline-block min-w-[80px] border-b-2 border-gray-300 mx-1 text-center font-semibold">
-                  {selected !== null ? q.options[q.correctIndex] : "___"}
+                  {selected !== null ? q.options[q.correctIndex] : "\u00A0"}
                 </span>
               )}
             </React.Fragment>
