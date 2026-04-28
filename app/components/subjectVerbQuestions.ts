@@ -212,4 +212,220 @@ export const svaQuestions: SVAQuestion[] = [
     explanation:
       "In academic IELTS writing, \"data\" can be treated as singular. \"Suggests\" is the safer choice.",
   },
+
+  // --- Additional "The number of" ---
+  {
+    sentence:
+      "The number of cars on the road ___ tripled since 1990.",
+    options: ["has", "have"],
+    correctIndex: 0,
+    explanation:
+      "\"The number of\" is singular. Use has.",
+  },
+  {
+    sentence:
+      "The number of patients waiting for surgery ___ every winter.",
+    options: ["increases", "increase"],
+    correctIndex: 0,
+    explanation:
+      "\"The number\" is the subject (singular). Use increases.",
+  },
+
+  // --- Additional long subject distractors ---
+  {
+    sentence:
+      "The cost of raw materials imported from overseas ___ risen sharply.",
+    options: ["has", "have"],
+    correctIndex: 0,
+    explanation:
+      "\"The cost\" is singular. \"Materials\" and \"overseas\" are inside prepositional phrases. Use has.",
+  },
+  {
+    sentence:
+      "The quality of public services in rural areas ___ a concern.",
+    options: ["remains", "remain"],
+    correctIndex: 0,
+    explanation:
+      "\"The quality\" is the subject (singular). Use remains.",
+  },
+  {
+    sentence:
+      "Sales of smartphones in developing nations ___ exceeded expectations.",
+    options: ["have", "has"],
+    correctIndex: 0,
+    explanation:
+      "\"Sales\" is the subject (plural). Use have.",
+  },
+  {
+    sentence:
+      "The average income of workers in the manufacturing sector ___ by 12%.",
+    options: ["fell", "fallen"],
+    correctIndex: 0,
+    explanation:
+      "\"The average income\" is singular. Use fell (past simple).",
+  },
+  {
+    sentence:
+      "Demand for organic products among younger consumers ___ growing.",
+    options: ["is", "are"],
+    correctIndex: 0,
+    explanation:
+      "\"Demand\" is the subject (singular, uncountable). Use is.",
+  },
+  {
+    sentence:
+      "The use of renewable energy sources in northern Europe ___ increased.",
+    options: ["has", "have"],
+    correctIndex: 0,
+    explanation:
+      "\"The use\" is singular. Use has.",
+  },
+
+  // --- Additional compound subjects ---
+  {
+    sentence: "Oil and gas ___ the main exports of the country.",
+    options: ["were", "was"],
+    correctIndex: 0,
+    explanation:
+      "\"Oil and gas\" = two things = plural. Use were.",
+  },
+  {
+    sentence: "Neither spending nor savings ___ changed during this period.",
+    options: ["have", "has"],
+    correctIndex: 0,
+    explanation:
+      "\"Neither...nor\" matches the nearest subject (\"savings\" = plural). Use have.",
+  },
+
+  // --- Additional "Each / Every" ---
+  {
+    sentence: "Each region ___ a unique pattern of population growth.",
+    options: ["displayed", "display"],
+    correctIndex: 0,
+    explanation:
+      "\"Each\" is always singular. Use displayed.",
+  },
+  {
+    sentence: "Every one of the students surveyed ___ to use a smartphone daily.",
+    options: ["was found", "were found"],
+    correctIndex: 0,
+    explanation:
+      "\"Every one\" is singular even though \"students\" is plural. Use was found.",
+  },
+
+  // --- Additional "There is/are" ---
+  {
+    sentence: "There ___ a number of factors behind this trend.",
+    options: ["are", "is"],
+    correctIndex: 0,
+    explanation:
+      "\"A number of factors\" means \"several factors\" = plural. Use are.",
+  },
+  {
+    sentence: "There ___ little difference between the two figures.",
+    options: ["was", "were"],
+    correctIndex: 0,
+    explanation:
+      "\"Little difference\" is singular. Use was.",
+  },
+  {
+    sentence: "There ___ very few countries where spending decreased.",
+    options: ["were", "was"],
+    correctIndex: 0,
+    explanation:
+      "\"Very few countries\" is plural. Use were.",
+  },
+
+  // --- Additional uncountable nouns ---
+  {
+    sentence: "The information in the two charts ___ that women lived longer.",
+    options: ["shows", "show"],
+    correctIndex: 0,
+    explanation:
+      "\"Information\" is uncountable and singular. Use shows.",
+  },
+  {
+    sentence: "Research into climate change ___ received more funding recently.",
+    options: ["has", "have"],
+    correctIndex: 0,
+    explanation:
+      "\"Research\" is uncountable and singular. Use has.",
+  },
+  {
+    sentence: "The evidence from multiple studies ___ this claim.",
+    options: ["supports", "support"],
+    correctIndex: 0,
+    explanation:
+      "\"The evidence\" is uncountable and singular. \"Studies\" is inside a prepositional phrase. Use supports.",
+  },
+
+  // --- Additional relative clause distractors ---
+  {
+    sentence:
+      "The city that attracted the most tourists ___ London.",
+    options: ["was", "were"],
+    correctIndex: 0,
+    explanation:
+      "\"The city\" is singular. \"That attracted the most tourists\" is extra info. Use was.",
+  },
+  {
+    sentence:
+      "Workers who earn above the average ___ a higher tax rate.",
+    options: ["pay", "pays"],
+    correctIndex: 0,
+    explanation:
+      "\"Workers\" is the subject (plural). Use pay.",
+  },
+  {
+    sentence:
+      "The category that showed the biggest change ___ transport.",
+    options: ["was", "were"],
+    correctIndex: 0,
+    explanation:
+      "\"The category\" is singular. Use was.",
+  },
+
+  // --- Additional tricky ones ---
+  {
+    sentence: "One in four adults ___ unable to swim.",
+    options: ["is", "are"],
+    correctIndex: 0,
+    explanation:
+      "\"One in four\" = \"one out of every four.\" The subject is \"one\" (singular). Use is.",
+  },
+  {
+    sentence: "Half of the population ___ in urban areas.",
+    options: ["lives", "live"],
+    correctIndex: 0,
+    explanation:
+      "\"Half of the population\" refers to a single group as a whole. Use lives.",
+  },
+  {
+    sentence: "The majority of respondents ___ in favour of the change.",
+    options: ["were", "was"],
+    correctIndex: 0,
+    explanation:
+      "\"The majority of respondents\" = most of them (plural sense). Use were.",
+  },
+  {
+    sentence: "None of the countries ___ a decrease in spending.",
+    options: ["showed", "shows"],
+    correctIndex: 0,
+    explanation:
+      "\"None of the countries\" = not one of them. With plural nouns, use plural verb: showed.",
+  },
+  {
+    sentence: "The rest of the money ___ spent on entertainment.",
+    options: ["was", "were"],
+    correctIndex: 0,
+    explanation:
+      "\"Money\" is uncountable. \"The rest of the money\" takes a singular verb. Use was.",
+  },
+  {
+    sentence: "Two thirds of the budget ___ allocated to healthcare.",
+    options: ["was", "were"],
+    correctIndex: 0,
+    explanation:
+      "\"The budget\" is singular. Fractions match the noun after \"of.\" Use was.",
+  },
 ];

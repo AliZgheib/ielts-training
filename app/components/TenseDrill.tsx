@@ -17,6 +17,7 @@ export function TenseDrill() {
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState({ correct: 0, wrong: 0 });
   const [wrongOnes, setWrongOnes] = useState<TenseQuestion[]>([]);
+  const [hintShown, setHintShown] = useState(false);
 
   const q = questions[index];
   const done = index >= questions.length;
@@ -37,6 +38,7 @@ export function TenseDrill() {
 
   const handleNext = useCallback(() => {
     setSelected(null);
+    setHintShown(false);
     setIndex((i) => i + 1);
   }, []);
 
@@ -45,6 +47,7 @@ export function TenseDrill() {
     setSelected(null);
     setScore({ correct: 0, wrong: 0 });
     setWrongOnes([]);
+    setHintShown(false);
   }, []);
 
   if (done) {
@@ -129,9 +132,18 @@ export function TenseDrill() {
       {/* Question card */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="mb-2">
-          <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
-            Time signal: {q.timeSignal}
-          </span>
+          {hintShown || selected !== null ? (
+            <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+              Time signal: {q.timeSignal}
+            </span>
+          ) : (
+            <button
+              onClick={() => setHintShown(true)}
+              className="text-xs font-medium text-gray-400 border border-gray-300 px-2 py-0.5 rounded hover:bg-gray-50 cursor-pointer"
+            >
+              Show hint
+            </button>
+          )}
         </div>
 
         <p className="text-lg text-gray-800 mb-6 leading-relaxed">

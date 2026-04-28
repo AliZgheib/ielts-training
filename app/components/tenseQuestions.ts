@@ -228,4 +228,196 @@ export const tenseQuestions: TenseQuestion[] = [
     explanation:
       "\"Since the beginning of the century\" connects to the present. Use present perfect: has risen.",
   },
+
+  // --- Additional Past Simple ---
+  {
+    sentence: "In 1998, the government ___ a new policy on immigration.",
+    timeSignal: "In 1998",
+    options: ["introduced", "has introduced", "introduces", "had introduced"],
+    correctIndex: 0,
+    explanation:
+      "\"In 1998\" is a finished year. Use past simple: introduced.",
+  },
+  {
+    sentence: "The price of oil ___ to its lowest level in 2016.",
+    timeSignal: "in 2016",
+    options: ["dropped", "has dropped", "drops", "had dropped"],
+    correctIndex: 0,
+    explanation:
+      "\"In 2016\" is a specific finished year. Use past simple: dropped.",
+  },
+  {
+    sentence: "Between 2000 and 2005, the birth rate in Japan ___ considerably.",
+    timeSignal: "Between 2000 and 2005",
+    options: ["declined", "has declined", "declines", "was declining"],
+    correctIndex: 0,
+    explanation:
+      "\"Between 2000 and 2005\" is a completed period. Use past simple: declined.",
+  },
+  {
+    sentence: "In the first half of 2009, exports ___ by nearly 30%.",
+    timeSignal: "In the first half of 2009",
+    options: ["fell", "have fallen", "fall", "had fallen"],
+    correctIndex: 0,
+    explanation:
+      "\"In the first half of 2009\" is a finished past period. Use past simple: fell.",
+  },
+  {
+    sentence: "The proportion of households with two cars ___ in 2003.",
+    timeSignal: "in 2003",
+    options: ["reached", "has reached", "reaches", "had reached"],
+    correctIndex: 0,
+    explanation:
+      "\"In 2003\" is a specific past year. Use past simple: reached.",
+  },
+  {
+    sentence: "Throughout the 1980s, inflation ___ at high levels.",
+    timeSignal: "Throughout the 1980s",
+    options: ["remained", "has remained", "remains", "had remained"],
+    correctIndex: 0,
+    explanation:
+      "\"Throughout the 1980s\" is a completed decade. Use past simple: remained.",
+  },
+  {
+    sentence: "The total number of flights ___ a record high in 2007.",
+    timeSignal: "in 2007",
+    options: ["hit", "has hit", "hits", "had hit"],
+    correctIndex: 0,
+    explanation:
+      "\"In 2007\" is a finished year. Use past simple: hit.",
+  },
+
+  // --- Additional Present Perfect ---
+  {
+    sentence: "The cost of housing ___ considerably since the early 2000s.",
+    timeSignal: "since the early 2000s",
+    options: ["has risen", "rose", "rises", "had risen"],
+    correctIndex: 0,
+    explanation:
+      "\"Since the early 2000s\" connects past to now. Use present perfect: has risen.",
+  },
+  {
+    sentence: "Up to now, no country ___ this target.",
+    timeSignal: "Up to now",
+    options: ["has met", "met", "meets", "had met"],
+    correctIndex: 0,
+    explanation:
+      "\"Up to now\" means right up to the present. Use present perfect: has met.",
+  },
+  {
+    sentence: "Over the past five years, the gap between rich and poor ___.",
+    timeSignal: "Over the past five years",
+    options: ["has widened", "widened", "widens", "had widened"],
+    correctIndex: 0,
+    explanation:
+      "\"Over the past five years\" includes now. Use present perfect: has widened.",
+  },
+  {
+    sentence: "Tourism ___ the largest source of income since 2018.",
+    timeSignal: "since 2018",
+    options: ["has become", "became", "becomes", "had become"],
+    correctIndex: 0,
+    explanation:
+      "\"Since 2018\" connects past to present. Use present perfect: has become.",
+  },
+  {
+    sentence: "In recent decades, the average temperature ___ by 1.5 degrees.",
+    timeSignal: "In recent decades",
+    options: ["has increased", "increased", "increases", "had increased"],
+    correctIndex: 0,
+    explanation:
+      "\"In recent decades\" includes the present. Use present perfect: has increased.",
+  },
+  {
+    sentence: "The number of smokers ___ steadily since the ban was introduced.",
+    timeSignal: "since the ban was introduced",
+    options: ["has fallen", "fell", "falls", "had fallen"],
+    correctIndex: 0,
+    explanation:
+      "\"Since\" always connects to the present. Use present perfect: has fallen.",
+  },
+
+  // --- Additional Present Simple (chart descriptions) ---
+  {
+    sentence: "The graph ___ how much water was consumed in three cities.",
+    timeSignal: "(describing the chart itself)",
+    options: ["shows", "showed", "has shown", "was showing"],
+    correctIndex: 0,
+    explanation:
+      "The chart still exists and still shows this. Use present simple: shows.",
+  },
+  {
+    sentence: "Overall, it ___ clear that spending on food decreased over time.",
+    timeSignal: "(stating an overall observation)",
+    options: ["is", "was", "has been", "had been"],
+    correctIndex: 0,
+    explanation:
+      "\"It is clear that\" states a fact visible right now. Use present simple: is.",
+  },
+  {
+    sentence: "The diagram ___ the process of recycling plastic bottles.",
+    timeSignal: "(describing the chart itself)",
+    options: ["outlines", "outlined", "has outlined", "was outlining"],
+    correctIndex: 0,
+    explanation:
+      "Describing what a diagram does uses present simple: outlines.",
+  },
+
+  // --- Additional Mixed / Tricky ---
+  {
+    sentence: "Before the recession hit in 2008, house prices ___ for a decade.",
+    timeSignal: "Before the recession hit in 2008",
+    options: ["had risen", "rose", "have risen", "rise"],
+    correctIndex: 0,
+    explanation:
+      "\"Before\" + past event = something that happened even earlier. Use past perfect: had risen.",
+  },
+  {
+    sentence: "By the end of the period, the figure ___ to just 5%.",
+    timeSignal: "By the end of the period",
+    options: ["had fallen", "fell", "has fallen", "falls"],
+    correctIndex: 0,
+    explanation:
+      "\"By the end of the period\" = before that past point. Use past perfect: had fallen.",
+  },
+  {
+    sentence: "Visitor numbers ___ slightly in 2014 before rising again the next year.",
+    timeSignal: "in 2014",
+    options: ["dipped", "have dipped", "dip", "had dipped"],
+    correctIndex: 0,
+    explanation:
+      "\"In 2014\" is a finished year. Use past simple: dipped.",
+  },
+  {
+    sentence: "To date, the population ___ by over 2 million.",
+    timeSignal: "To date",
+    options: ["has grown", "grew", "grows", "had grown"],
+    correctIndex: 0,
+    explanation:
+      "\"To date\" means up until now. Use present perfect: has grown.",
+  },
+  {
+    sentence: "The figures ___ that men spent more on entertainment than women.",
+    timeSignal: "(describing what the figures show)",
+    options: ["indicate", "indicated", "have indicated", "had indicated"],
+    correctIndex: 0,
+    explanation:
+      "Describing what data shows uses present simple: indicate.",
+  },
+  {
+    sentence: "Petrol consumption ___ its highest point in 2005 and then declined.",
+    timeSignal: "in 2005",
+    options: ["reached", "has reached", "reaches", "had reached"],
+    correctIndex: 0,
+    explanation:
+      "\"In 2005\" is a past year, and \"then declined\" confirms a past narrative. Use past simple: reached.",
+  },
+  {
+    sentence: "Prior to 2010, very few people ___ online banking.",
+    timeSignal: "Prior to 2010",
+    options: ["had used", "used", "have used", "use"],
+    correctIndex: 0,
+    explanation:
+      "\"Prior to 2010\" = before a past point. Use past perfect: had used.",
+  },
 ];
