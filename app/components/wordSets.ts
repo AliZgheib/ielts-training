@@ -403,6 +403,9 @@ export const wordSets: WordSet[] = [
       "tennis", "thesis", "topsoil", "trainers", "trivial", "umbrella", "urban",
       "vegetarian", "volcanic", "waist", "whales", "winding", "wombat",
       "yoghurt", "yolk",
+      "adolescence", "ascertained", "circumstances", "disappear", "dissemination",
+      "fundamental", "guaranteed", "inconclusive", "intricacies", "mathematical",
+      "merely", "ottoman", "questionnaire", "unforeseen", "vehicle", "vehicles",
     ],
   },
 
