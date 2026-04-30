@@ -388,7 +388,7 @@ export const wordSets: WordSet[] = [
     words: [
       "achievement", "afternoon", "ancient", "annuity", "anxiety", "apartment",
       "ash", "assess", "assessed", "assessment", "athletes", "bedsit", "brakes",
-      "boundaries", "brass", "cabins", "calcium", "canteen", "catalogue", "center", "centre",
+      "boundaries", "brass", "cabins", "calcium", "canteen",
       "chemistry", "cigar", "climate", "cloudy", "colonization", "council",
       "counsel", "countryside", "desert", "dessert", "disease", "dissertation",
       "emigrate", "environment", "erosion", "exhibit", "exhibition", "faculty",
