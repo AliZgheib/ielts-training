@@ -393,7 +393,7 @@ export const wordSets: WordSet[] = [
       "countryside", "desert", "dessert", "disease", "dissertation",
       "emigrate", "environment", "erosion", "exhibit", "exhibition", "faculty",
       "fifteen", "fifty", "flat", "fundraising", "fur", "grazed", "hairdresser",
-      "harbors", "harbours", "imagination", "immigrate", "implemented",
+      "harbors", "imagination", "immigrate", "implemented",
       "incineration", "laboratory", "leisure", "livestock", "lounge",
       "manuscript", "midday", "mortgage", "motto", "museum", "niece", "non-refundable",
       "pavements", "pedestrians", "pharaoh", "physics", "postbox", "potassium",
