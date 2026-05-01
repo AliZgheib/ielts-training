@@ -123,16 +123,16 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
     <>
     <div className="fixed top-[49px] left-0 w-full z-40 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
         <div className="flex justify-between items-center text-xs mb-1 text-gray-800">
-          <span>📖 <span className="font-semibold">{uniqueSeenCount}/{uniqueTotal}</span></span>
+          <span>📖 Words <span className="font-semibold">{uniqueSeenCount}/{uniqueTotal}</span></span>
           <div className="flex items-center gap-4">
-            <span>📝 <span className="font-semibold">{totalAttempts}</span></span>
-            <span>✅ <span className="font-semibold">{successCount}</span></span>
-            <span>❌ <span className="font-semibold">{blindFailCount}</span></span>
+            <span>📝 Attempts <span className="font-semibold">{totalAttempts}</span></span>
+            <span>✅ Success <span className="font-semibold">{successCount}</span></span>
+            <span>❌ Errors <span className="font-semibold">{blindFailCount}</span></span>
             <button
               className={`rounded px-1.5 py-0.5 border ${wordsToReview.length > 0 ? "bg-red-50 border-red-300 hover:bg-red-100" : "border-transparent"}`}
               onClick={() => wordsToReview.length > 0 && setShowReviewModal(true)}
             >
-              ⚠️ <span className={`font-semibold ${wordsToReview.length > 0 ? "text-red-600" : ""}`}>{wordsToReview.length}</span>
+              ⚠️ Review <span className={`font-semibold ${wordsToReview.length > 0 ? "text-red-600" : ""}`}>{wordsToReview.length}</span>
             </button>
           </div>
         </div>
