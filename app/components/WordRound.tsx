@@ -38,7 +38,9 @@ export const WordRound = ({
   React.useEffect(() => { targetWordRef.current = targetWord; }, [targetWord]);
 
   const speechLang = React.useContext(SpeechContext);
-  React.useEffect(() => {
+
+  const sayIt = React.useCallback(() => {
+    window.speechSynthesis.cancel();
     const msg = new SpeechSynthesisUtterance(sayWord || targetWord);
     msg.voice =
       speechSynthesis
@@ -51,8 +53,12 @@ export const WordRound = ({
     }
     msg.lang = "en-UK";
     window.speechSynthesis.speak(msg);
-    return () => window.speechSynthesis.cancel();
   }, [rate, sayWord, targetWord, speechLang]);
+
+  React.useEffect(() => {
+    sayIt();
+    return () => window.speechSynthesis.cancel();
+  }, [sayIt]);
 
   React.useEffect(() => {
     const onKey = ({ key }: any) => {
@@ -118,8 +124,14 @@ export const WordRound = ({
           }
         />
       </div>
-      <div className="text-sm text-gray-400 mt-2">
-        Press Enter to submit
+      <div className="flex items-center gap-4 mt-2">
+        <span className="text-sm text-gray-400">Press Enter to submit</span>
+        <button
+          onClick={sayIt}
+          className="text-sm text-blue-500 hover:text-blue-700 underline"
+        >
+          🔊 Replay
+        </button>
       </div>
     </div>
   );
