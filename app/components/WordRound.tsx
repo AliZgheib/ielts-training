@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import Keyboard from "react-simple-keyboard";
-import "react-simple-keyboard/build/css/index.css";
 import { WordRow, LetterType } from "./LetterRow";
 import { SpeechContext } from "./SpeechContext";
 
@@ -28,8 +26,6 @@ export const WordRound = ({
   onSuccess,
   onFail,
 }: WordRoundProps) => {
-  const ref = React.useRef<any>(null);
-
   const [buffer, setBuffer] = React.useState("");
 
   const speechLang = React.useContext(SpeechContext);
@@ -118,17 +114,6 @@ export const WordRound = ({
       <div className="text-sm text-gray-400 mt-2">
         Press Enter to submit
       </div>
-      {!blind && (
-        <div className="pt-[80px] px-[80px] self-stretch">
-          <Keyboard
-            keyboardRef={(r) => {
-              ref.current = r;
-            }}
-            onChange={() => {}}
-            onKeyPress={() => {}}
-          />
-        </div>
-      )}
     </div>
   );
 };

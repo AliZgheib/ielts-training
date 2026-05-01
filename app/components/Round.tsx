@@ -116,8 +116,8 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
         <div className="flex justify-between text-xs text-gray-500 mb-1">
           <span>{uniqueSeen} / {uniqueTotal} words</span>
           <div className="flex items-center gap-3">
-            <span>🔥 {streak}</span>
-            <span>{cleanCount}/{uniqueSeen} perfect</span>
+            <span>🔥 {streak} in a row</span>
+            <span>{cleanCount}/{uniqueSeen} first try</span>
             {strugglingWords.length > 0 && (
               <button
                 className="flex items-center gap-1 bg-red-50 border border-red-300 text-red-600 hover:bg-red-100 hover:border-red-400 rounded px-2 py-0.5"
@@ -128,12 +128,14 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
             )}
           </div>
         </div>
-        {strugglingWords.length > 0 && (
+        {strugglingWords.length > 0 ? (
           <div className="flex flex-wrap gap-1 mb-1">
             {strugglingWords.map((w) => (
               <span key={w} className="text-xs bg-red-50 border border-red-200 text-red-500 rounded px-1.5 py-0.5">{w}</span>
             ))}
           </div>
+        ) : (
+          <div className="text-xs text-gray-300 mb-1">no words to review yet</div>
         )}
         <div className="w-full bg-gray-200 rounded-full h-1.5">
           <div
