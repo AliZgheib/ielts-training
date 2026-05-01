@@ -64,7 +64,7 @@ export default function HomePage() {
 
   if (activeSkill === "spelling") {
     return (
-      <div className="min-h-screen">
+      <div className="h-screen overflow-hidden">
         <nav className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-4">
           <button
             onClick={() => setActiveSkill(null)}

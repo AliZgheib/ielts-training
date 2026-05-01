@@ -95,7 +95,7 @@ export const WordRound = ({
   });
 
   return (
-    <div className="absolute w-full h-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center">
       {hint && (
         <div className="mt-20 mb-2 px-6 py-2 bg-yellow-100 border border-yellow-300 rounded text-sm text-gray-700 text-center max-w-sm">
           {hint}

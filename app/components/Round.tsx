@@ -80,6 +80,7 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
   );
 
   const [cleanCount, setCleanCount] = React.useState(0);
+  const [seenWords] = React.useState(() => new Set<string>());
 
   const [playSuccess] = useSound("/success.mp3");
   const [playFail] = useSound("/fail.mp3");
@@ -98,17 +99,18 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
     }
   }, [result, i, onResult, wordsForGame]);
 
-  const total = wordsForGame.length;
+  const uniqueTotal = words.length;
+  const uniqueSeen = seenWords.size;
   const progressBar = (
-    <div className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
+    <div className="fixed top-[49px] left-0 w-full z-40 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
       <div className="flex justify-between text-xs text-gray-500 mb-1">
-        <span>{i} / {total}</span>
+        <span>{uniqueSeen} / {uniqueTotal} words seen</span>
         <span>{cleanCount} perfect</span>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-1.5">
         <div
           className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
-          style={{ width: `${total > 0 ? Math.round((i / total) * 100) : 0}%` }}
+          style={{ width: `${uniqueTotal > 0 ? Math.round((uniqueSeen / uniqueTotal) * 100) : 0}%` }}
         />
       </div>
     </div>
@@ -152,6 +154,7 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
           targetWord={word}
           hint={hints?.[word]}
           onSuccess={() => {
+            seenWords.add(word);
             if (result[word].failedAttempts === 0) setCleanCount((c) => c + 1);
             send({ type: "success" });
             playSuccess();
