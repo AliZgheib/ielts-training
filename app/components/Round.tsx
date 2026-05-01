@@ -83,7 +83,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
   const [cleanCount, setCleanCount] = React.useState(0);
   const [seenWords] = React.useState(() => new Set<string>());
   const [streak, setStreak] = React.useState(0);
-  const [showStrugglingModal, setShowStrugglingModal] = React.useState(false);
+  const [showStrugglingModal, setShowStrugglingModal] = React.useState(true);
   const [savedConfirm, setSavedConfirm] = React.useState(false);
 
   const [playSuccess] = useSound("/success.mp3");
