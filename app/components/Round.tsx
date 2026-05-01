@@ -112,31 +112,18 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
 
   const progressBar = (
     <>
-      <div className="fixed top-[49px] left-0 w-full z-40 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
-        <div className="flex justify-between text-xs text-gray-500 mb-1">
-          <span>{uniqueSeen} / {uniqueTotal} words</span>
-          <div className="flex items-center gap-3">
-            <span>🔥 {streak} in a row</span>
-            <span>{cleanCount}/{uniqueSeen} first try</span>
-            {strugglingWords.length > 0 && (
-              <button
-                className="flex items-center gap-1 bg-red-50 border border-red-300 text-red-600 hover:bg-red-100 hover:border-red-400 rounded px-2 py-0.5"
-                onClick={() => setShowStrugglingModal(true)}
-              >
-                {strugglingWords.length} to review
-              </button>
-            )}
-          </div>
+    <div className="fixed top-[49px] left-0 w-full z-40 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
+        <div className="flex items-center gap-4 text-xs mb-1">
+          <span className="text-gray-400">📖 Words <span className="font-semibold text-gray-700">{uniqueSeen}/{uniqueTotal}</span></span>
+          <span className="text-gray-400">🔥 Streak <span className="font-semibold text-gray-700">{streak}</span></span>
+          <span className="text-gray-400">✓ Clean <span className="font-semibold text-gray-700">{cleanCount}/{uniqueSeen}</span></span>
+          <button
+            className={`rounded px-1.5 py-0.5 border ${strugglingWords.length > 0 ? "bg-red-50 border-red-300 hover:bg-red-100" : "border-transparent"}`}
+            onClick={() => strugglingWords.length > 0 && setShowStrugglingModal(true)}
+          >
+            <span className="text-gray-400">⚑ Review <span className={`font-semibold ${strugglingWords.length > 0 ? "text-red-600" : "text-gray-700"}`}>{strugglingWords.length}</span></span>
+          </button>
         </div>
-        {strugglingWords.length > 0 ? (
-          <div className="flex flex-wrap gap-1 mb-1">
-            {strugglingWords.map((w) => (
-              <span key={w} className="text-xs bg-red-50 border border-red-200 text-red-500 rounded px-1.5 py-0.5">{w}</span>
-            ))}
-          </div>
-        ) : (
-          <div className="text-xs text-gray-300 mb-1">no words to review yet</div>
-        )}
         <div className="w-full bg-gray-200 rounded-full h-1.5">
           <div
             className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
