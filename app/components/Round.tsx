@@ -81,7 +81,8 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
   );
 
   const [cleanCount, setCleanCount] = React.useState(0);
-  const [seenWords] = React.useState(() => new Set<string>());
+  const [seenCount, setSeenCount] = React.useState(0);
+  const seenWordsRef = React.useRef(new Set<string>());
   const [streak, setStreak] = React.useState(0);
   const [showStrugglingModal, setShowStrugglingModal] = React.useState(false);
   const [savedConfirm, setSavedConfirm] = React.useState(false);
@@ -104,7 +105,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
   }, [result, i, onResult, wordsForGame]);
 
   const uniqueTotal = words.length;
-  const uniqueSeen = seenWords.size;
+  const uniqueSeen = seenCount;
   const strugglingWords = Object.entries(result)
     .filter(([, v]) => v.failedAttempts >= 2)
     .map(([w]) => w);
@@ -239,8 +240,9 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
           targetWord={word}
           hint={hints?.[word]}
           onSuccess={() => {
-            seenWords.add(word);
-            if (result[word].failedAttempts === 0 && !seenWords.has(word)) setCleanCount((c) => c + 1);
+            if (result[word].failedAttempts === 0 && !seenWordsRef.current.has(word)) setCleanCount((c) => c + 1);
+            if (!seenWordsRef.current.has(word)) setSeenCount((c) => c + 1);
+            seenWordsRef.current.add(word);
             setStreak((s) => s + 1);
             send({ type: "success" });
             playSuccess();
