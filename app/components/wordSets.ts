@@ -318,7 +318,7 @@ export const wordSets: WordSet[] = [
       "psychology", "questionnaire", "receipt", "receive", "recommend", "relief",
       "restaurant", "rhyme", "rhythm", "scissors", "separate", "speech",
       "sufficient", "technique", "temperature", "thesis", "umbrella",
-      "unfortunately", "vegetarian", "Wednesday", "yoghurt",
+      "unfortunately", "vegetarian", "yoghurt",
     ],
   },
 
@@ -438,7 +438,7 @@ export const wordSets: WordSet[] = [
       "separate", "sign", "software", "success", "sufficient", "suggestion",
       "support", "technique", "temperature", "textbook", "thief", "timetable",
       "tomorrow", "tonight", "traffic", "university", "unfortunate", "view",
-      "village", "volunteer", "waterfall", "weather", "wednesday", "weekend",
+      "village", "volunteer", "waterfall", "weather", "weekend",
       "website", "workplace",
     ],
   },
