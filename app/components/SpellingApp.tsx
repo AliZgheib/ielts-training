@@ -39,6 +39,7 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
   const [dictate, setDictate] = React.useState(false);
   const [selectedSetId, setSelectedSetId] = React.useState(defaultSet.id);
   const [words, setWords] = React.useState(defaultSet.words);
+  const [hints, setHints] = React.useState<Record<string, string> | undefined>(defaultSet.hints);
   const [results, setResults] = React.useState<
     undefined | { word: string; failedAttempts: number }[]
   >(undefined);
@@ -83,6 +84,7 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
             setPlaying(false);
           }}
           multiply={3}
+          hints={hints}
           words={words
             .filter((w) => w.length > 0)
             .map((w) => w.toLocaleLowerCase())
@@ -115,6 +117,7 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
               if (set) {
                 setSelectedSetId(set.id);
                 setWords(set.words);
+                setHints(set.hints);
                 setResults(undefined);
               }
             }}

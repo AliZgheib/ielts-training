@@ -12,6 +12,7 @@ type WordRoundProps = {
   blind: boolean;
   targetWord: string;
   sayWord?: string;
+  hint?: string;
   commonErrorWord?: string;
   onSuccess: () => void;
   onFail: (failWith: string) => void;
@@ -22,6 +23,7 @@ export const WordRound = ({
   blind,
   targetWord,
   sayWord,
+  hint,
   commonErrorWord,
   onSuccess,
   onFail,
@@ -94,6 +96,11 @@ export const WordRound = ({
 
   return (
     <div className="absolute w-full h-full flex flex-col items-center">
+      {hint && (
+        <div className="mt-6 mb-2 px-6 py-2 bg-yellow-100 border border-yellow-300 rounded text-sm text-gray-700 text-center max-w-sm">
+          {hint}
+        </div>
+      )}
       {!blind && (
         <div className="flex flex-row m-[10px]">
           <WordRow word={targetLetters} />

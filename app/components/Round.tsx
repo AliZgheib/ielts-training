@@ -55,10 +55,11 @@ function shuffleArray<T>(originalArray: T[]): T[] {
 export type RoundProps = {
   words: string[];
   multiply: number;
+  hints?: Record<string, string>;
   onResult: (result: Record<string, { failedAttempts: number }>) => void;
 };
 
-export const Round = ({ words, multiply, onResult }: RoundProps) => {
+export const Round = ({ words, multiply, hints, onResult }: RoundProps) => {
   const [wordsForGame] = React.useState(() => {
     const output: string[] = [];
     for (let i = 0; i < multiply; i++) {
@@ -100,6 +101,7 @@ export const Round = ({ words, multiply, onResult }: RoundProps) => {
         key="play"
         blind={false}
         targetWord={word}
+        hint={hints?.[word]}
         commonErrorWord={lastError}
         onSuccess={() => {
           send({ type: "success" });
@@ -122,6 +124,7 @@ export const Round = ({ words, multiply, onResult }: RoundProps) => {
         key="blind"
         blind={true}
         targetWord={word}
+        hint={hints?.[word]}
         onSuccess={() => {
           send({ type: "success" });
           playSuccess();
