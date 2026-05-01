@@ -81,6 +81,8 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
 
   const [cleanCount, setCleanCount] = React.useState(0);
   const [seenWords] = React.useState(() => new Set<string>());
+  const [streak, setStreak] = React.useState(0);
+  const [showStrugglingModal, setShowStrugglingModal] = React.useState(false);
 
   const [playSuccess] = useSound("/success.mp3");
   const [playFail] = useSound("/fail.mp3");
@@ -101,21 +103,78 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
 
   const uniqueTotal = words.length;
   const uniqueSeen = seenWords.size;
+  const strugglingWords = Object.entries(result)
+    .filter(([, v]) => v.failedAttempts >= 2)
+    .map(([w]) => w);
+
+  const Tooltip = ({ text, children }: { text: string; children: React.ReactNode }) => (
+    <span className="relative group inline-flex items-center gap-1">
+      {children}
+      <span className="text-gray-400 cursor-default">ⓘ</span>
+      <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-48 rounded bg-gray-800 text-white text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity text-center z-50">
+        {text}
+      </span>
+    </span>
+  );
+
   const progressBar = (
-    <div className="fixed top-[49px] left-0 w-full z-40 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
-      <div className="flex justify-between text-xs text-gray-500 mb-1">
-        <span>{uniqueSeen} / {uniqueTotal} words seen</span>
-        <div className="flex items-center gap-3">
-          <span>{cleanCount} perfect</span>
+    <>
+      <div className="fixed top-[49px] left-0 w-full z-40 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
+        <div className="flex justify-between text-xs text-gray-500 mb-1">
+          <Tooltip text="How many unique words you have completed at least once">
+            <span>{uniqueSeen} / {uniqueTotal} seen</span>
+          </Tooltip>
+          <div className="flex items-center gap-3">
+            <Tooltip text="Consecutive blind passes with no mistake in between. Resets on any error.">
+              <span>🔥 {streak}</span>
+            </Tooltip>
+            <Tooltip text="Words you got right on the first blind attempt, with no prior mistakes.">
+              <span>{cleanCount}/{uniqueSeen} clean</span>
+            </Tooltip>
+            {strugglingWords.length > 0 && (
+              <button
+                className="text-red-500 hover:text-red-700 flex items-center gap-1"
+                onClick={() => setShowStrugglingModal(true)}
+              >
+                <Tooltip text="Words you have failed 2 or more times. Click to see the list.">
+                  <span>{strugglingWords.length} struggling</span>
+                </Tooltip>
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-1.5">
+          <div
+            className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
+            style={{ width: `${uniqueTotal > 0 ? Math.round((uniqueSeen / uniqueTotal) * 100) : 0}%` }}
+          />
         </div>
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-1.5">
+      {showStrugglingModal && (
         <div
-          className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
-          style={{ width: `${uniqueTotal > 0 ? Math.round((uniqueSeen / uniqueTotal) * 100) : 0}%` }}
-        />
-      </div>
-    </div>
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+          onClick={() => setShowStrugglingModal(false)}
+        >
+          <div
+            className="bg-white rounded-lg shadow-xl px-6 py-5 min-w-[200px] max-w-sm"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="font-semibold mb-3 text-gray-800">Struggling words</div>
+            <ul className="space-y-1">
+              {strugglingWords.map((w) => (
+                <li key={w} className="text-sm text-red-600">{w} <span className="text-gray-400">({result[w].failedAttempts}x)</span></li>
+              ))}
+            </ul>
+            <button
+              className="mt-4 text-xs text-gray-400 hover:text-gray-600"
+              onClick={() => setShowStrugglingModal(false)}
+            >
+              close
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 
   if (state === State.Play) {
@@ -138,6 +197,7 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
               r[word].failedAttempts++;
               return r;
             });
+            setStreak(0);
             setLastError(failWith);
             send({ type: "fail" });
             playFail();
@@ -158,6 +218,7 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
           onSuccess={() => {
             seenWords.add(word);
             if (result[word].failedAttempts === 0) setCleanCount((c) => c + 1);
+            setStreak((s) => s + 1);
             send({ type: "success" });
             playSuccess();
             setI((i) => i + 1);
@@ -167,6 +228,7 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
               r[word].failedAttempts++;
               return r;
             });
+            setStreak(0);
             setLastError(failWith);
             send({ type: "fail" });
             playFail();
