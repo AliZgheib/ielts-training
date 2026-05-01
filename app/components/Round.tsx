@@ -41,15 +41,25 @@ const roundMachine = createMachine({
   },
 });
 
-function shuffleArray<T>(originalArray: T[]): T[] {
-  const array = [...originalArray];
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
+function pickWeighted(
+  words: string[],
+  wordStats: Record<string, { failedAttempts: number }>,
+  seenWords: Set<string>,
+  exclude?: string
+): string {
+  const pool = words.length > 1 ? words.filter((w) => w !== exclude) : words;
+  const weights = pool.map((w) => {
+    if (!seenWords.has(w)) return 3;
+    if ((wordStats[w]?.failedAttempts ?? 0) > 0) return 2;
+    return 1;
+  });
+  const total = weights.reduce((a, b) => a + b, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < pool.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return pool[i];
   }
-  return array;
+  return pool[pool.length - 1];
 }
 
 export type RoundProps = {
@@ -63,13 +73,7 @@ export type RoundProps = {
 };
 
 export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, onResult }: RoundProps) => {
-  const [wordsForGame] = React.useState(() => {
-    const output: string[] = [];
-    for (let i = 0; i < multiply; i++) {
-      output.push(...words);
-    }
-    return shuffleArray(output);
-  });
+  const totalTurns = words.length * multiply;
 
   const [wordStats, setWordStats] = React.useState(() =>
     words.reduce(
@@ -96,17 +100,19 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
 
   const [snapshot, send] = useMachine(roundMachine);
   const state = snapshot.value;
-  const [wordIndex, setWordIndex] = React.useState(0);
+  const [completedTurns, setCompletedTurns] = React.useState(0);
   const [lastAttempt, setLastAttempt] = React.useState<string | undefined>(
     undefined
   );
-  const word = wordsForGame[wordIndex % wordsForGame.length];
+  const [currentWord, setCurrentWord] = React.useState(() =>
+    words[Math.floor(Math.random() * words.length)]
+  );
 
   React.useEffect(() => {
-    if (wordIndex === wordsForGame.length) {
+    if (completedTurns === totalTurns) {
       onResult(wordStats);
     }
-  }, [wordStats, wordIndex, onResult, wordsForGame]);
+  }, [completedTurns, totalTurns, wordStats, onResult]);
 
   React.useEffect(() => {
     if (uniqueSeenCount === words.length && !finishedModalShownRef.current) {
@@ -275,8 +281,8 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
           key="play"
           blind={false}
           rate={rate}
-          targetWord={word}
-          hint={hints?.[word]}
+          targetWord={currentWord}
+          hint={hints?.[currentWord]}
           commonErrorWord={lastAttempt}
           onSuccess={() => {
             send({ type: "success" });
@@ -284,7 +290,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
           }}
           onFail={(failWith) => {
             setWordStats((r) => {
-              r[word].failedAttempts++;
+              r[currentWord].failedAttempts++;
               return r;
             });
             setLastAttempt(failWith);
@@ -302,22 +308,23 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
           key="blind"
           blind={true}
           rate={rate}
-          targetWord={word}
-          hint={hints?.[word]}
+          targetWord={currentWord}
+          hint={hints?.[currentWord]}
           onSuccess={() => {
-            if (!seenWordsRef.current.has(word)) {
-              seenWordsRef.current.add(word);
+            if (!seenWordsRef.current.has(currentWord)) {
+              seenWordsRef.current.add(currentWord);
               setUniqueSeenCount((c) => c + 1);
             }
             setSuccessCount((c) => c + 1);
             send({ type: "success" });
             playSuccess();
-            setWordIndex((idx) => idx + 1);
+            setCompletedTurns((c) => c + 1);
+            setCurrentWord(pickWeighted(words, wordStats, seenWordsRef.current, currentWord));
           }}
           onFail={(failWith) => {
             setBlindFailCount((c) => c + 1);
             setWordStats((r) => {
-              r[word].failedAttempts++;
+              r[currentWord].failedAttempts++;
               return r;
             });
             setLastAttempt(failWith);
