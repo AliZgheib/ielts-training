@@ -48,8 +48,10 @@ function pickWeighted(
   exclude?: string
 ): string {
   const pool = words.length > 1 ? words.filter((w) => w !== exclude) : words;
+  const unseenCount = pool.filter((w) => !seenWords.has(w)).length;
+  const unseenWeight = Math.max(5, unseenCount > 0 ? Math.ceil(words.length / unseenCount) : 5);
   const weights = pool.map((w) => {
-    if (!seenWords.has(w)) return 3;
+    if (!seenWords.has(w)) return unseenWeight;
     if ((wordStats[w]?.failedAttempts ?? 0) > 0) return 2;
     return 1;
   });
