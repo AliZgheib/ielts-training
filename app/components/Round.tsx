@@ -58,10 +58,11 @@ export type RoundProps = {
   hints?: Record<string, string>;
   rate?: number;
   onSaveStruggling?: (words: string[]) => void;
+  onExit: () => void;
   onResult: (result: Record<string, { failedAttempts: number }>) => void;
 };
 
-export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult }: RoundProps) => {
+export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, onResult }: RoundProps) => {
   const [wordsForGame] = React.useState(() => {
     const output: string[] = [];
     for (let i = 0; i < multiply; i++) {
@@ -158,7 +159,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
               </button>
               <button
                 className="text-sm text-gray-500 hover:text-gray-700"
-                onClick={() => onResult(wordStats)}
+                onClick={onExit}
               >
                 Back to word lists
               </button>

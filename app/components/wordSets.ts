@@ -318,7 +318,7 @@ export const wordSets: WordSet[] = [
       "disease", "dissertation", "dissemination", "doubt",
       "efficient", "embarrass", "emigrate", "environment", "erosion",
       "exaggerate", "excellent", "exhibit", "exhibition", "experience", "explanation",
-      "faculty", "field", "fifteen", "fifty", "flat", "foreign", "fortnight",
+      "faculty", "field", "flat", "foreign", "fortnight",
       "friend", "fundamental", "fundraising", "fur",
       "government", "grazed", "guarantee", "guaranteed",
       "hairdresser", "harbors", "hardware", "happened", "height", "honest",

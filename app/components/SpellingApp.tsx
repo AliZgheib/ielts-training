@@ -81,6 +81,7 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
       <SpeechContext.Provider value={voice}>
         <Round
           onSaveStruggling={(merged) => setMyWords(merged)}
+          onExit={() => setPlaying(false)}
           onResult={(result) => {
             const sorted = Object.entries(result)
               .sort((a, b) => b[1].failedAttempts - a[1].failedAttempts)
