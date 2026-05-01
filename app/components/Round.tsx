@@ -86,6 +86,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
   const [uniqueSeenCount, setUniqueSeenCount] = React.useState(0);
   const seenWordsRef = React.useRef(new Set<string>());
   const [showReviewModal, setShowReviewModal] = React.useState(false);
+  const [showErrorModal, setShowErrorModal] = React.useState(false);
   const [showSavedConfirm, setShowSavedConfirm] = React.useState(false);
   const [showFinishedModal, setShowFinishedModal] = React.useState(false);
   const finishedModalShownRef = React.useRef(false);
@@ -119,6 +120,9 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
   const wordsToReview = Object.entries(wordStats)
     .filter(([, v]) => v.failedAttempts >= 2)
     .map(([w]) => w);
+  const errorWords = Object.entries(wordStats)
+    .filter(([, v]) => v.failedAttempts >= 1)
+    .map(([w]) => w);
 
   const progressBar = (
     <>
@@ -128,7 +132,12 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
           <div className="flex items-center gap-4">
             <span>📝 Attempts <span className="font-semibold">{totalAttempts}</span></span>
             <span>✅ Success <span className="font-semibold">{successCount}</span></span>
-            <span>❌ Errors <span className="font-semibold">{blindFailCount}</span></span>
+            <button
+              className={`rounded px-1.5 py-0.5 border ${errorWords.length > 0 ? "hover:bg-red-50 border-transparent hover:border-red-200" : "border-transparent"}`}
+              onClick={() => errorWords.length > 0 && setShowErrorModal(true)}
+            >
+              ❌ Errors <span className={`font-semibold ${errorWords.length > 0 ? "text-red-500" : ""}`}>{blindFailCount}</span>
+            </button>
             <button
               className={`rounded px-1.5 py-0.5 border ${wordsToReview.length > 0 ? "bg-red-50 border-red-300 hover:bg-red-100" : "border-transparent"}`}
               onClick={() => wordsToReview.length > 0 && setShowReviewModal(true)}
@@ -162,6 +171,50 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
                 onClick={onExit}
               >
                 Back to word lists
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showErrorModal && errorWords.length > 0 && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+          onClick={() => setShowErrorModal(false)}
+        >
+          <div
+            className="bg-white rounded-lg shadow-xl px-6 py-5 min-w-[200px] max-w-sm"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="font-semibold mb-1 text-gray-800">Error words</div>
+            <div className="text-xs text-gray-400 mb-3">Words you made at least one mistake on</div>
+            <ul className="space-y-1">
+              {errorWords.map((w) => (
+                <li key={w} className="text-sm text-red-600">{w} <span className="text-gray-400">({wordStats[w].failedAttempts}x)</span></li>
+              ))}
+            </ul>
+            <div className="mt-4 flex items-center gap-3">
+              {showSavedConfirm ? (
+                <span className="text-xs text-green-600">saved!</span>
+              ) : (
+                <button
+                  className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                  onClick={() => {
+                    const existing = JSON.parse(localStorage.getItem("ielts-my-list") || "[]") as string[];
+                    const merged = Array.from(new Set([...existing, ...errorWords]));
+                    localStorage.setItem("ielts-my-list", JSON.stringify(merged));
+                    onSaveStruggling?.(merged);
+                    setShowSavedConfirm(true);
+                    setTimeout(() => setShowSavedConfirm(false), 2000);
+                  }}
+                >
+                  + save to My Words
+                </button>
+              )}
+              <button
+                className="text-xs text-gray-400 hover:text-gray-600 ml-auto"
+                onClick={() => setShowErrorModal(false)}
+              >
+                close
               </button>
             </div>
           </div>
