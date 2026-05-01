@@ -143,6 +143,7 @@ export const WordRound = ({
         <span className="text-sm text-gray-400">Press Enter to submit</span>
         <button
           tabIndex={-1}
+          onMouseDown={(e) => e.preventDefault()}
           onClick={sayIt}
           className="text-sm text-blue-500 hover:text-blue-700 underline cursor-pointer"
         >
