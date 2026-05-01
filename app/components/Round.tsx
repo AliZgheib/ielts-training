@@ -155,7 +155,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
           />
         </div>
       </div>
-      {showStrugglingModal && (
+      {showStrugglingModal && strugglingWords.length > 0 && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
           onClick={() => setShowStrugglingModal(false)}
