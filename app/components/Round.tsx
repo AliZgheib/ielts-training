@@ -83,6 +83,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
   const [cleanCount, setCleanCount] = React.useState(0);
   const [seenCount, setSeenCount] = React.useState(0);
   const seenWordsRef = React.useRef(new Set<string>());
+  const failedWordsRef = React.useRef(new Set<string>());
   const [streak, setStreak] = React.useState(0);
   const [showStrugglingModal, setShowStrugglingModal] = React.useState(false);
   const [savedConfirm, setSavedConfirm] = React.useState(false);
@@ -196,6 +197,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
             playSuccess();
           }}
           onFail={(failWith) => {
+            failedWordsRef.current.add(word);
             setResult((r) => {
               r[word].failedAttempts++;
               return r;
@@ -219,7 +221,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
           targetWord={word}
           hint={hints?.[word]}
           onSuccess={() => {
-            if (result[word].failedAttempts === 0 && !seenWordsRef.current.has(word)) setCleanCount((c) => c + 1);
+            if (!failedWordsRef.current.has(word) && !seenWordsRef.current.has(word)) setCleanCount((c) => c + 1);
             if (!seenWordsRef.current.has(word)) setSeenCount((c) => c + 1);
             seenWordsRef.current.add(word);
             setStreak((s) => s + 1);
@@ -228,6 +230,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
             setI((i) => i + 1);
           }}
           onFail={(failWith) => {
+            failedWordsRef.current.add(word);
             setResult((r) => {
               r[word].failedAttempts++;
               return r;

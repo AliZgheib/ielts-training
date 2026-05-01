@@ -128,7 +128,7 @@ export const WordRound = ({
         <span className="text-sm text-gray-400">Press Enter to submit</span>
         <button
           onClick={sayIt}
-          className="text-sm text-blue-500 hover:text-blue-700 underline"
+          className="text-sm text-blue-500 hover:text-blue-700 underline cursor-pointer"
         >
           🔊 Replay
         </button>
