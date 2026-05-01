@@ -27,6 +27,15 @@ export const WordRound = ({
   onFail,
 }: WordRoundProps) => {
   const [buffer, setBuffer] = React.useState("");
+  const bufferRef = React.useRef(buffer);
+  const onSuccessRef = React.useRef(onSuccess);
+  const onFailRef = React.useRef(onFail);
+  const targetWordRef = React.useRef(targetWord);
+
+  React.useEffect(() => { bufferRef.current = buffer; }, [buffer]);
+  React.useEffect(() => { onSuccessRef.current = onSuccess; }, [onSuccess]);
+  React.useEffect(() => { onFailRef.current = onFail; }, [onFail]);
+  React.useEffect(() => { targetWordRef.current = targetWord; }, [targetWord]);
 
   const speechLang = React.useContext(SpeechContext);
   React.useEffect(() => {
@@ -48,11 +57,11 @@ export const WordRound = ({
   React.useEffect(() => {
     const onKey = ({ key }: any) => {
       if (key === "Enter") {
-        if (buffer.length === 0) return;
-        if (buffer === targetWord) {
-          onSuccess();
+        if (bufferRef.current.length === 0) return;
+        if (bufferRef.current === targetWordRef.current) {
+          onSuccessRef.current();
         } else {
-          onFail(buffer);
+          onFailRef.current(bufferRef.current);
         }
       } else if (key === "Backspace") {
         setBuffer((p) => p.slice(0, -1));
@@ -61,10 +70,8 @@ export const WordRound = ({
       }
     };
     window.addEventListener("keyup", onKey);
-    return () => {
-      window.removeEventListener("keyup", onKey);
-    };
-  }, [onFail, onSuccess, targetWord, setBuffer, buffer, sayWord]);
+    return () => window.removeEventListener("keyup", onKey);
+  }, []);
 
   // Build display: show typed characters, and in non-blind mode also show the target
   const typedLetters = buffer.split("").map((char, index) => {
