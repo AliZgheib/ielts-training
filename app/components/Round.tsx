@@ -113,16 +113,18 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
   const progressBar = (
     <>
     <div className="fixed top-[49px] left-0 w-full z-40 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
-        <div className="flex items-center gap-4 text-xs mb-1">
-          <span className="text-gray-400">📖 Words <span className="font-semibold text-gray-700">{uniqueSeen}/{uniqueTotal}</span></span>
-          <span className="text-gray-400">🔥 Streak <span className="font-semibold text-gray-700">{streak}</span></span>
-          <span className="text-gray-400">✓ Clean <span className="font-semibold text-gray-700">{cleanCount}/{uniqueSeen}</span></span>
-          <button
-            className={`rounded px-1.5 py-0.5 border ${strugglingWords.length > 0 ? "bg-red-50 border-red-300 hover:bg-red-100" : "border-transparent"}`}
-            onClick={() => strugglingWords.length > 0 && setShowStrugglingModal(true)}
-          >
-            <span className="text-gray-400">⚑ Review <span className={`font-semibold ${strugglingWords.length > 0 ? "text-red-600" : "text-gray-700"}`}>{strugglingWords.length}</span></span>
-          </button>
+        <div className="flex justify-between items-center text-xs mb-1 text-gray-800">
+          <span>📖 Words <span className="font-semibold">{uniqueSeen}/{uniqueTotal}</span></span>
+          <div className="flex items-center gap-4">
+            <span>🔥 Streak <span className="font-semibold">{streak}</span></span>
+            <span>✨ First try <span className="font-semibold">{cleanCount}/{uniqueSeen}</span></span>
+            <button
+              className={`rounded px-1.5 py-0.5 border ${strugglingWords.length > 0 ? "bg-red-50 border-red-300 hover:bg-red-100" : "border-transparent"}`}
+              onClick={() => strugglingWords.length > 0 && setShowStrugglingModal(true)}
+            >
+              ⚠️ To review <span className={`font-semibold ${strugglingWords.length > 0 ? "text-red-600" : ""}`}>{strugglingWords.length}</span>
+            </button>
+          </div>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-1.5">
           <div
