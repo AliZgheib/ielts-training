@@ -59,6 +59,11 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
     "Default voice"
   );
 
+  const [myWords, setMyWords] = React.useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    return JSON.parse(localStorage.getItem("ielts-my-list") || "[]");
+  });
+
   if (dictate) {
     return (
       <SpeechContext.Provider value={voice}>
@@ -75,6 +80,7 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
     return (
       <SpeechContext.Provider value={voice}>
         <Round
+          onSaveStruggling={(merged) => setMyWords(merged)}
           onResult={(result) => {
             const sorted = Object.entries(result)
               .sort((a, b) => b[1].failedAttempts - a[1].failedAttempts)
@@ -115,6 +121,13 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
             className="w-full border border-gray-300 rounded p-2 text-sm"
             value={selectedSetId}
             onChange={(e) => {
+              if (e.target.value === "my-words") {
+                setSelectedSetId("my-words");
+                setWords(myWords);
+                setHints(undefined);
+                setResults(undefined);
+                return;
+              }
               const set = wordSets.find((s) => s.id === e.target.value);
               if (set) {
                 setSelectedSetId(set.id);
@@ -124,6 +137,9 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
               }
             }}
           >
+            <optgroup label="My Lists">
+              <option value="my-words">My Words ({myWords.length} words)</option>
+            </optgroup>
             {categories.map((cat) => (
               <optgroup key={cat} label={cat}>
                 {wordSets

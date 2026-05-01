@@ -57,10 +57,11 @@ export type RoundProps = {
   multiply: number;
   hints?: Record<string, string>;
   rate?: number;
+  onSaveStruggling?: (words: string[]) => void;
   onResult: (result: Record<string, { failedAttempts: number }>) => void;
 };
 
-export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) => {
+export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult }: RoundProps) => {
   const [wordsForGame] = React.useState(() => {
     const output: string[] = [];
     for (let i = 0; i < multiply; i++) {
@@ -83,6 +84,7 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
   const [seenWords] = React.useState(() => new Set<string>());
   const [streak, setStreak] = React.useState(0);
   const [showStrugglingModal, setShowStrugglingModal] = React.useState(false);
+  const [savedConfirm, setSavedConfirm] = React.useState(false);
 
   const [playSuccess] = useSound("/success.mp3");
   const [playFail] = useSound("/fail.mp3");
@@ -107,21 +109,24 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
     .filter(([, v]) => v.failedAttempts >= 2)
     .map(([w]) => w);
 
-  const Tooltip = ({ text, children }: { text: string; children: React.ReactNode }) => (
-    <span className="relative group inline-flex items-center gap-1">
-      {children}
-      <span className="text-gray-400 cursor-default">ⓘ</span>
-      <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-48 rounded bg-gray-800 text-white text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity text-center z-50">
-        {text}
+  const Tooltip = ({ text, children, align = "center" }: { text: string; children: React.ReactNode; align?: "left" | "center" | "right" }) => {
+    const pos = align === "left" ? "left-0" : align === "right" ? "right-0" : "left-1/2 -translate-x-1/2";
+    return (
+      <span className="relative group inline-flex items-center gap-1">
+        {children}
+        <span className="text-gray-400 cursor-default">ⓘ</span>
+        <span className={`pointer-events-none absolute bottom-full ${pos} mb-1 w-48 rounded bg-gray-800 text-white text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity text-center z-50`}>
+          {text}
+        </span>
       </span>
-    </span>
-  );
+    );
+  };
 
   const progressBar = (
     <>
       <div className="fixed top-[49px] left-0 w-full z-40 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
         <div className="flex justify-between text-xs text-gray-500 mb-1">
-          <Tooltip text="How many unique words you have completed at least once">
+          <Tooltip text="How many unique words you have completed at least once" align="left">
             <span>{uniqueSeen} / {uniqueTotal} seen</span>
           </Tooltip>
           <div className="flex items-center gap-3">
@@ -136,7 +141,7 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
                 className="text-red-500 hover:text-red-700 flex items-center gap-1"
                 onClick={() => setShowStrugglingModal(true)}
               >
-                <Tooltip text="Words you have failed 2 or more times. Click to see the list.">
+                <Tooltip text="Words you have failed 2 or more times. Click to see the list." align="right">
                   <span>{strugglingWords.length} struggling</span>
                 </Tooltip>
               </button>
@@ -165,12 +170,31 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
                 <li key={w} className="text-sm text-red-600">{w} <span className="text-gray-400">({result[w].failedAttempts}x)</span></li>
               ))}
             </ul>
-            <button
-              className="mt-4 text-xs text-gray-400 hover:text-gray-600"
-              onClick={() => setShowStrugglingModal(false)}
-            >
-              close
-            </button>
+            <div className="mt-4 flex items-center gap-3">
+              {savedConfirm ? (
+                <span className="text-xs text-green-600">saved!</span>
+              ) : (
+                <button
+                  className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                  onClick={() => {
+                    const existing = JSON.parse(localStorage.getItem("ielts-my-list") || "[]") as string[];
+                    const merged = Array.from(new Set([...existing, ...strugglingWords]));
+                    localStorage.setItem("ielts-my-list", JSON.stringify(merged));
+                    onSaveStruggling?.(merged);
+                    setSavedConfirm(true);
+                    setTimeout(() => setSavedConfirm(false), 2000);
+                  }}
+                >
+                  + save to My Words
+                </button>
+              )}
+              <button
+                className="text-xs text-gray-400 hover:text-gray-600 ml-auto"
+                onClick={() => setShowStrugglingModal(false)}
+              >
+                close
+              </button>
+            </div>
           </div>
         </div>
       )}
