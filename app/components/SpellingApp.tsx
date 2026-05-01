@@ -75,7 +75,6 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
     return (
       <SpeechContext.Provider value={voice}>
         <Round
-          onStop={() => setPlaying(false)}
           onResult={(result) => {
             const sorted = Object.entries(result)
               .sort((a, b) => b[1].failedAttempts - a[1].failedAttempts)
