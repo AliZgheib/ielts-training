@@ -70,7 +70,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
     return shuffleArray(output);
   });
 
-  const [result, setResult] = React.useState(() =>
+  const [wordStats, setWordStats] = React.useState(() =>
     words.reduce(
       (p, w: string) => {
         p[w] = { failedAttempts: 0 };
@@ -80,33 +80,42 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
     )
   );
 
-  const [cleanCount, setCleanCount] = React.useState(0);
-  const [seenCount, setSeenCount] = React.useState(0);
-  const currentWordFailedRef = React.useRef(false);
-  const [streak, setStreak] = React.useState(0);
-  const [showStrugglingModal, setShowStrugglingModal] = React.useState(false);
-  const [savedConfirm, setSavedConfirm] = React.useState(false);
+  const [successCount, setSuccessCount] = React.useState(0);
+  const [blindFailCount, setBlindFailCount] = React.useState(0);
+  const [uniqueSeenCount, setUniqueSeenCount] = React.useState(0);
+  const seenWordsRef = React.useRef(new Set<string>());
+  const [showReviewModal, setShowReviewModal] = React.useState(false);
+  const [showSavedConfirm, setShowSavedConfirm] = React.useState(false);
+  const [showFinishedModal, setShowFinishedModal] = React.useState(false);
+  const finishedModalShownRef = React.useRef(false);
 
   const [playSuccess] = useSound("/success.mp3");
   const [playFail] = useSound("/fail.mp3");
 
   const [snapshot, send] = useMachine(roundMachine);
   const state = snapshot.value;
-  const [i, setI] = React.useState(0);
-  const [lastError, setLastError] = React.useState<string | undefined>(
+  const [wordIndex, setWordIndex] = React.useState(0);
+  const [lastAttempt, setLastAttempt] = React.useState<string | undefined>(
     undefined
   );
-  const word = wordsForGame[i % wordsForGame.length];
+  const word = wordsForGame[wordIndex % wordsForGame.length];
 
   React.useEffect(() => {
-    if (i === wordsForGame.length) {
-      onResult(result);
+    if (wordIndex === wordsForGame.length) {
+      onResult(wordStats);
     }
-  }, [result, i, onResult, wordsForGame]);
+  }, [wordStats, wordIndex, onResult, wordsForGame]);
 
-  const uniqueTotal = wordsForGame.length;
-  const uniqueSeen = seenCount;
-  const strugglingWords = Object.entries(result)
+  React.useEffect(() => {
+    if (uniqueSeenCount === words.length && !finishedModalShownRef.current) {
+      finishedModalShownRef.current = true;
+      setShowFinishedModal(true);
+    }
+  }, [uniqueSeenCount, words.length]);
+
+  const uniqueTotal = words.length;
+  const totalAttempts = successCount + blindFailCount;
+  const wordsToReview = Object.entries(wordStats)
     .filter(([, v]) => v.failedAttempts >= 2)
     .map(([w]) => w);
 
@@ -114,29 +123,53 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
     <>
     <div className="fixed top-[49px] left-0 w-full z-40 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
         <div className="flex justify-between items-center text-xs mb-1 text-gray-800">
-          <span>📖 Words <span className="font-semibold">{uniqueSeen}/{uniqueTotal}</span></span>
+          <span>📖 <span className="font-semibold">{uniqueSeenCount}/{uniqueTotal}</span></span>
           <div className="flex items-center gap-4">
-            <span>🔥 Streak <span className="font-semibold">{streak}</span></span>
-            <span>✨ First try <span className="font-semibold">{cleanCount}/{uniqueSeen}</span></span>
+            <span>📝 <span className="font-semibold">{totalAttempts}</span></span>
+            <span>✅ <span className="font-semibold">{successCount}</span></span>
+            <span>❌ <span className="font-semibold">{blindFailCount}</span></span>
             <button
-              className={`rounded px-1.5 py-0.5 border ${strugglingWords.length > 0 ? "bg-red-50 border-red-300 hover:bg-red-100" : "border-transparent"}`}
-              onClick={() => strugglingWords.length > 0 && setShowStrugglingModal(true)}
+              className={`rounded px-1.5 py-0.5 border ${wordsToReview.length > 0 ? "bg-red-50 border-red-300 hover:bg-red-100" : "border-transparent"}`}
+              onClick={() => wordsToReview.length > 0 && setShowReviewModal(true)}
             >
-              ⚠️ To review <span className={`font-semibold ${strugglingWords.length > 0 ? "text-red-600" : ""}`}>{strugglingWords.length}</span>
+              ⚠️ <span className={`font-semibold ${wordsToReview.length > 0 ? "text-red-600" : ""}`}>{wordsToReview.length}</span>
             </button>
           </div>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-1.5">
           <div
             className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
-            style={{ width: `${uniqueTotal > 0 ? Math.round(Math.min(uniqueSeen / uniqueTotal, 1) * 100) : 0}%` }}
+            style={{ width: `${uniqueTotal > 0 ? Math.round(Math.min(uniqueSeenCount / uniqueTotal, 1) * 100) : 0}%` }}
           />
         </div>
       </div>
-      {showStrugglingModal && strugglingWords.length > 0 && (
+      {showFinishedModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-lg shadow-xl px-6 py-5 min-w-[240px] max-w-sm text-center">
+            <div className="text-2xl mb-2">🎉</div>
+            <div className="font-semibold text-gray-800 mb-1">You finished the list!</div>
+            <div className="text-xs text-gray-400 mb-4">You went through all {words.length} words.</div>
+            <div className="flex flex-col gap-2">
+              <button
+                className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded px-4 py-2"
+                onClick={() => setShowFinishedModal(false)}
+              >
+                Keep practicing
+              </button>
+              <button
+                className="text-sm text-gray-500 hover:text-gray-700"
+                onClick={() => onResult(wordStats)}
+              >
+                Back to word lists
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showReviewModal && wordsToReview.length > 0 && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-          onClick={() => setShowStrugglingModal(false)}
+          onClick={() => setShowReviewModal(false)}
         >
           <div
             className="bg-white rounded-lg shadow-xl px-6 py-5 min-w-[200px] max-w-sm"
@@ -145,23 +178,23 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
             <div className="font-semibold mb-1 text-gray-800">Words to review</div>
             <div className="text-xs text-gray-400 mb-3">Failed 2 or more times this session</div>
             <ul className="space-y-1">
-              {strugglingWords.map((w) => (
-                <li key={w} className="text-sm text-red-600">{w} <span className="text-gray-400">({result[w].failedAttempts}x)</span></li>
+              {wordsToReview.map((w) => (
+                <li key={w} className="text-sm text-red-600">{w} <span className="text-gray-400">({wordStats[w].failedAttempts}x)</span></li>
               ))}
             </ul>
             <div className="mt-4 flex items-center gap-3">
-              {savedConfirm ? (
+              {showSavedConfirm ? (
                 <span className="text-xs text-green-600">saved!</span>
               ) : (
                 <button
                   className="text-xs text-blue-600 hover:text-blue-800 font-medium"
                   onClick={() => {
                     const existing = JSON.parse(localStorage.getItem("ielts-my-list") || "[]") as string[];
-                    const merged = Array.from(new Set([...existing, ...strugglingWords]));
+                    const merged = Array.from(new Set([...existing, ...wordsToReview]));
                     localStorage.setItem("ielts-my-list", JSON.stringify(merged));
                     onSaveStruggling?.(merged);
-                    setSavedConfirm(true);
-                    setTimeout(() => setSavedConfirm(false), 2000);
+                    setShowSavedConfirm(true);
+                    setTimeout(() => setShowSavedConfirm(false), 2000);
                   }}
                 >
                   + save to My Words
@@ -169,7 +202,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
               )}
               <button
                 className="text-xs text-gray-400 hover:text-gray-600 ml-auto"
-                onClick={() => setShowStrugglingModal(false)}
+                onClick={() => setShowReviewModal(false)}
               >
                 close
               </button>
@@ -190,19 +223,17 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
           rate={rate}
           targetWord={word}
           hint={hints?.[word]}
-          commonErrorWord={lastError}
+          commonErrorWord={lastAttempt}
           onSuccess={() => {
             send({ type: "success" });
             playSuccess();
           }}
           onFail={(failWith) => {
-            currentWordFailedRef.current = true;
-            setResult((r) => {
+            setWordStats((r) => {
               r[word].failedAttempts++;
               return r;
             });
-            setStreak(0);
-            setLastError(failWith);
+            setLastAttempt(failWith);
             send({ type: "fail" });
             playFail();
           }}
@@ -220,22 +251,22 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
           targetWord={word}
           hint={hints?.[word]}
           onSuccess={() => {
-            if (!currentWordFailedRef.current) setCleanCount((c) => c + 1);
-            setSeenCount((c) => c + 1);
-            currentWordFailedRef.current = false;
-            setStreak((s) => s + 1);
+            if (!seenWordsRef.current.has(word)) {
+              seenWordsRef.current.add(word);
+              setUniqueSeenCount((c) => c + 1);
+            }
+            setSuccessCount((c) => c + 1);
             send({ type: "success" });
             playSuccess();
-            setI((i) => i + 1);
+            setWordIndex((idx) => idx + 1);
           }}
           onFail={(failWith) => {
-            currentWordFailedRef.current = true;
-            setResult((r) => {
+            setBlindFailCount((c) => c + 1);
+            setWordStats((r) => {
               r[word].failedAttempts++;
               return r;
             });
-            setStreak(0);
-            setLastError(failWith);
+            setLastAttempt(failWith);
             send({ type: "fail" });
             playFail();
           }}
