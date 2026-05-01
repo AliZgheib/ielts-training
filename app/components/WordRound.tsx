@@ -27,6 +27,7 @@ export const WordRound = ({
   onFail,
 }: WordRoundProps) => {
   const [buffer, setBuffer] = React.useState("");
+  const [showHint, setShowHint] = React.useState(false);
   const bufferRef = React.useRef(buffer);
   const onSuccessRef = React.useRef(onSuccess);
   const onFailRef = React.useRef(onFail);
@@ -36,6 +37,7 @@ export const WordRound = ({
   React.useEffect(() => { onSuccessRef.current = onSuccess; }, [onSuccess]);
   React.useEffect(() => { onFailRef.current = onFail; }, [onFail]);
   React.useEffect(() => { targetWordRef.current = targetWord; }, [targetWord]);
+  React.useEffect(() => { setShowHint(false); }, [targetWord]);
 
   const speechLang = React.useContext(SpeechContext);
 
@@ -106,8 +108,19 @@ export const WordRound = ({
   return (
     <div className="w-full flex flex-col items-center pt-14">
       {hint && (
-        <div className="mt-20 mb-2 px-6 py-2 bg-yellow-100 border border-yellow-300 rounded text-sm text-gray-700 text-center max-w-sm">
-          {hint}
+        <div className="mt-20 mb-2 text-center">
+          {showHint ? (
+            <div className="px-6 py-2 bg-yellow-100 border border-yellow-300 rounded text-sm text-gray-700 max-w-sm">
+              {hint}
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowHint(true)}
+              className="text-xs text-gray-400 underline cursor-pointer hover:text-gray-600"
+            >
+              show hint
+            </button>
+          )}
         </div>
       )}
       {!blind && (
