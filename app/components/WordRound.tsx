@@ -114,6 +114,7 @@ export const WordRound = ({
             </div>
           ) : (
             <button
+              tabIndex={-1}
               onClick={() => setShowHint(true)}
               className="text-xs text-gray-400 underline cursor-pointer hover:text-gray-600"
             >
@@ -139,6 +140,7 @@ export const WordRound = ({
       <div className="flex items-center gap-4 mt-2">
         <span className="text-sm text-gray-400">Press Enter to submit</span>
         <button
+          tabIndex={-1}
           onClick={sayIt}
           className="text-sm text-blue-500 hover:text-blue-700 underline cursor-pointer"
         >
