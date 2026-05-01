@@ -65,6 +65,8 @@ export const WordRound = ({
     const onKey = ({ key }: any) => {
       if (key === "Enter") {
         if (bufferRef.current.length === 0) return;
+        window.speechSynthesis.cancel();
+        (document.activeElement as HTMLElement)?.blur();
         if (bufferRef.current === targetWordRef.current) {
           onSuccessRef.current();
         } else {
