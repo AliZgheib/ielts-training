@@ -83,7 +83,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
   const [cleanCount, setCleanCount] = React.useState(0);
   const [seenWords] = React.useState(() => new Set<string>());
   const [streak, setStreak] = React.useState(0);
-  const [showStrugglingModal, setShowStrugglingModal] = React.useState(true);
+  const [showStrugglingModal, setShowStrugglingModal] = React.useState(false);
   const [savedConfirm, setSavedConfirm] = React.useState(false);
 
   const [playSuccess] = useSound("/success.mp3");
@@ -131,7 +131,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
           </Tooltip>
           <div className="flex items-center gap-3">
             <Tooltip text="Consecutive blind passes with no mistake in between. Resets on any error.">
-              <span>🔥 {streak}</span>
+              <span>🔥 {streak} streak</span>
             </Tooltip>
             <Tooltip text="Words you got right on the first blind attempt, with no prior mistakes.">
               <span>{cleanCount}/{uniqueSeen} clean</span>
@@ -141,9 +141,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
                 className="flex items-center gap-1 bg-red-50 border border-red-300 text-red-600 hover:bg-red-100 hover:border-red-400 rounded px-2 py-0.5 cursor-pointer"
                 onClick={() => setShowStrugglingModal(true)}
               >
-                <Tooltip text="Words you have failed 2 or more times. Click to see the list." align="right">
-                  <span>{strugglingWords.length} struggling</span>
-                </Tooltip>
+                {strugglingWords.length} struggling
               </button>
             )}
           </div>
@@ -164,7 +162,8 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
             className="bg-white rounded-lg shadow-xl px-6 py-5 min-w-[200px] max-w-sm"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="font-semibold mb-3 text-gray-800">Struggling words</div>
+            <div className="font-semibold mb-1 text-gray-800">Struggling words</div>
+            <div className="text-xs text-gray-400 mb-3">Failed 2 or more times this session</div>
             <ul className="space-y-1">
               {strugglingWords.map((w) => (
                 <li key={w} className="text-sm text-red-600">{w} <span className="text-gray-400">({result[w].failedAttempts}x)</span></li>
@@ -241,7 +240,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
           hint={hints?.[word]}
           onSuccess={() => {
             seenWords.add(word);
-            if (result[word].failedAttempts === 0) setCleanCount((c) => c + 1);
+            if (result[word].failedAttempts === 0 && !seenWords.has(word)) setCleanCount((c) => c + 1);
             setStreak((s) => s + 1);
             send({ type: "success" });
             playSuccess();
