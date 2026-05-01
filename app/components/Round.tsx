@@ -82,8 +82,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
 
   const [cleanCount, setCleanCount] = React.useState(0);
   const [seenCount, setSeenCount] = React.useState(0);
-  const seenWordsRef = React.useRef(new Set<string>());
-  const failedWordsRef = React.useRef(new Set<string>());
+  const currentWordFailedRef = React.useRef(false);
   const [streak, setStreak] = React.useState(0);
   const [showStrugglingModal, setShowStrugglingModal] = React.useState(false);
   const [savedConfirm, setSavedConfirm] = React.useState(false);
@@ -105,7 +104,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
     }
   }, [result, i, onResult, wordsForGame]);
 
-  const uniqueTotal = words.length;
+  const uniqueTotal = wordsForGame.length;
   const uniqueSeen = seenCount;
   const strugglingWords = Object.entries(result)
     .filter(([, v]) => v.failedAttempts >= 2)
@@ -130,7 +129,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
         <div className="w-full bg-gray-200 rounded-full h-1.5">
           <div
             className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
-            style={{ width: `${uniqueTotal > 0 ? Math.round((uniqueSeen / uniqueTotal) * 100) : 0}%` }}
+            style={{ width: `${uniqueTotal > 0 ? Math.round(Math.min(uniqueSeen / uniqueTotal, 1) * 100) : 0}%` }}
           />
         </div>
       </div>
@@ -197,7 +196,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
             playSuccess();
           }}
           onFail={(failWith) => {
-            failedWordsRef.current.add(word);
+            currentWordFailedRef.current = true;
             setResult((r) => {
               r[word].failedAttempts++;
               return r;
@@ -221,16 +220,16 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
           targetWord={word}
           hint={hints?.[word]}
           onSuccess={() => {
-            if (!failedWordsRef.current.has(word) && !seenWordsRef.current.has(word)) setCleanCount((c) => c + 1);
-            if (!seenWordsRef.current.has(word)) setSeenCount((c) => c + 1);
-            seenWordsRef.current.add(word);
+            if (!currentWordFailedRef.current) setCleanCount((c) => c + 1);
+            setSeenCount((c) => c + 1);
+            currentWordFailedRef.current = false;
             setStreak((s) => s + 1);
             send({ type: "success" });
             playSuccess();
             setI((i) => i + 1);
           }}
           onFail={(failWith) => {
-            failedWordsRef.current.add(word);
+            currentWordFailedRef.current = true;
             setResult((r) => {
               r[word].failedAttempts++;
               return r;
