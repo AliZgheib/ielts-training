@@ -57,10 +57,11 @@ export type RoundProps = {
   multiply: number;
   hints?: Record<string, string>;
   rate?: number;
+  onStop?: () => void;
   onResult: (result: Record<string, { failedAttempts: number }>) => void;
 };
 
-export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) => {
+export const Round = ({ words, multiply, hints, rate, onStop, onResult }: RoundProps) => {
   const [wordsForGame] = React.useState(() => {
     const output: string[] = [];
     for (let i = 0; i < multiply; i++) {
@@ -105,7 +106,17 @@ export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) =>
     <div className="fixed top-[49px] left-0 w-full z-40 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
       <div className="flex justify-between text-xs text-gray-500 mb-1">
         <span>{uniqueSeen} / {uniqueTotal} words seen</span>
-        <span>{cleanCount} perfect</span>
+        <div className="flex items-center gap-3">
+          <span>{cleanCount} perfect</span>
+          {onStop && (
+            <button
+              onClick={onStop}
+              className="text-blue-500 hover:text-blue-700 font-medium"
+            >
+              ← Setup
+            </button>
+          )}
+        </div>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-1.5">
         <div

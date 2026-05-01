@@ -74,16 +74,8 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
   if (playing) {
     return (
       <SpeechContext.Provider value={voice}>
-        <nav className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-4">
-          <button
-            onClick={() => setPlaying(false)}
-            className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
-          >
-            ← Back
-          </button>
-          <h1 className="text-lg font-semibold">Spelling Practice</h1>
-        </nav>
         <Round
+          onStop={() => setPlaying(false)}
           onResult={(result) => {
             const sorted = Object.entries(result)
               .sort((a, b) => b[1].failedAttempts - a[1].failedAttempts)
