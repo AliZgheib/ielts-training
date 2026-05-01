@@ -56,10 +56,11 @@ export type RoundProps = {
   words: string[];
   multiply: number;
   hints?: Record<string, string>;
+  rate?: number;
   onResult: (result: Record<string, { failedAttempts: number }>) => void;
 };
 
-export const Round = ({ words, multiply, hints, onResult }: RoundProps) => {
+export const Round = ({ words, multiply, hints, rate, onResult }: RoundProps) => {
   const [wordsForGame] = React.useState(() => {
     const output: string[] = [];
     for (let i = 0; i < multiply; i++) {
@@ -78,6 +79,8 @@ export const Round = ({ words, multiply, hints, onResult }: RoundProps) => {
     )
   );
 
+  const [cleanCount, setCleanCount] = React.useState(0);
+
   const [playSuccess] = useSound("/success.mp3");
   const [playFail] = useSound("/fail.mp3");
 
@@ -95,51 +98,76 @@ export const Round = ({ words, multiply, hints, onResult }: RoundProps) => {
     }
   }, [result, i, onResult, wordsForGame]);
 
+  const total = wordsForGame.length;
+  const progressBar = (
+    <div className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-sm px-4 py-2 shadow-sm">
+      <div className="flex justify-between text-xs text-gray-500 mb-1">
+        <span>{i} / {total}</span>
+        <span>{cleanCount} perfect</span>
+      </div>
+      <div className="w-full bg-gray-200 rounded-full h-1.5">
+        <div
+          className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
+          style={{ width: `${total > 0 ? Math.round((i / total) * 100) : 0}%` }}
+        />
+      </div>
+    </div>
+  );
+
   if (state === State.Play) {
     return (
-      <WordRound
-        key="play"
-        blind={false}
-        targetWord={word}
-        hint={hints?.[word]}
-        commonErrorWord={lastError}
-        onSuccess={() => {
-          send({ type: "success" });
-          playSuccess();
-        }}
-        onFail={(failWith) => {
-          setResult((r) => {
-            r[word].failedAttempts++;
-            return r;
-          });
-          setLastError(failWith);
-          send({ type: "fail" });
-          playFail();
-        }}
-      />
+      <>
+        {progressBar}
+        <WordRound
+          key="play"
+          blind={false}
+          rate={rate}
+          targetWord={word}
+          hint={hints?.[word]}
+          commonErrorWord={lastError}
+          onSuccess={() => {
+            send({ type: "success" });
+            playSuccess();
+          }}
+          onFail={(failWith) => {
+            setResult((r) => {
+              r[word].failedAttempts++;
+              return r;
+            });
+            setLastError(failWith);
+            send({ type: "fail" });
+            playFail();
+          }}
+        />
+      </>
     );
   } else if (state === State.Blind) {
     return (
-      <WordRound
-        key="blind"
-        blind={true}
-        targetWord={word}
-        hint={hints?.[word]}
-        onSuccess={() => {
-          send({ type: "success" });
-          playSuccess();
-          setI((i) => i + 1);
-        }}
-        onFail={(failWith) => {
-          setResult((r) => {
-            r[word].failedAttempts++;
-            return r;
-          });
-          setLastError(failWith);
-          send({ type: "fail" });
-          playFail();
-        }}
-      />
+      <>
+        {progressBar}
+        <WordRound
+          key="blind"
+          blind={true}
+          rate={rate}
+          targetWord={word}
+          hint={hints?.[word]}
+          onSuccess={() => {
+            if (result[word].failedAttempts === 0) setCleanCount((c) => c + 1);
+            send({ type: "success" });
+            playSuccess();
+            setI((i) => i + 1);
+          }}
+          onFail={(failWith) => {
+            setResult((r) => {
+              r[word].failedAttempts++;
+              return r;
+            });
+            setLastError(failWith);
+            send({ type: "fail" });
+            playFail();
+          }}
+        />
+      </>
     );
   } else if (state === State.Success) {
     return (

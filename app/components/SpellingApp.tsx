@@ -35,6 +35,7 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
   const [dictateSet, setDictateSet] = React.useState<string>("letters");
   const [playing, setPlaying] = React.useState(false);
   const [rate, setRate] = React.useState(1);
+  const [spellingRate, setSpellingRate] = React.useState(1);
   const [length, setLength] = React.useState(6);
   const [dictate, setDictate] = React.useState(false);
   const [selectedSetId, setSelectedSetId] = React.useState(defaultSet.id);
@@ -85,6 +86,7 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
           }}
           multiply={3}
           hints={hints}
+          rate={spellingRate}
           words={words
             .filter((w) => w.length > 0)
             .map((w) => w.toLocaleLowerCase())
@@ -132,6 +134,34 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
                     </option>
                   ))}
               </optgroup>
+            ))}
+          </select>
+        </div>
+
+        {/* Speech Rate */}
+        <div className="mx-[10px] mb-2 w-[250px]">
+          <label className="text-sm block mb-1">Speech Rate: {spellingRate}</label>
+          <input
+            type="range"
+            className="w-full"
+            value={spellingRate}
+            onChange={(e) => setSpellingRate(parseFloat(e.target.value))}
+            min={0.3}
+            max={2}
+            step={0.1}
+          />
+        </div>
+
+        {/* Voice */}
+        <div className="mx-[10px] mb-2">
+          <select
+            className="border border-gray-300 rounded p-1 text-sm"
+            value={voice || "Default voice"}
+            onChange={(e) => setVoice(e.target.value)}
+          >
+            <option disabled value="Default voice">Default Voice</option>
+            {voices.map((v, idx) => (
+              <option key={idx} value={v}>{v}</option>
             ))}
           </select>
         </div>
