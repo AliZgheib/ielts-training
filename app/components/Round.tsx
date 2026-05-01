@@ -161,29 +161,6 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
           />
         </div>
       </div>
-      {showFinishedModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-lg shadow-xl px-6 py-5 min-w-[240px] max-w-sm text-center">
-            <div className="text-2xl mb-2">🎉</div>
-            <div className="font-semibold text-gray-800 mb-1">You finished the list!</div>
-            <div className="text-xs text-gray-400 mb-4">You went through all {words.length} words.</div>
-            <div className="flex flex-col gap-2">
-              <button
-                className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded px-4 py-2"
-                onClick={() => setShowFinishedModal(false)}
-              >
-                Keep practicing
-              </button>
-              <button
-                className="text-sm text-gray-500 hover:text-gray-700"
-                onClick={onExit}
-              >
-                Back to word lists
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       {showErrorModal && errorWords.length > 0 && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
@@ -274,6 +251,33 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
       )}
     </>
   );
+
+  if (showFinishedModal) {
+    return (
+      <>
+        {progressBar}
+        <div className="w-full flex flex-col items-center pt-14 mt-20">
+          <div className="text-2xl mb-2">🎉</div>
+          <div className="font-semibold text-gray-800 mb-1">You finished the list!</div>
+          <div className="text-xs text-gray-400 mb-4">You went through all {words.length} words.</div>
+          <div className="flex flex-col gap-2">
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded px-4 py-2"
+              onClick={() => setShowFinishedModal(false)}
+            >
+              Keep practicing
+            </button>
+            <button
+              className="text-sm text-gray-500 hover:text-gray-700"
+              onClick={onExit}
+            >
+              Back to word lists
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   if (state === State.Play) {
     return (
