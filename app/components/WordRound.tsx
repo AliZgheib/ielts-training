@@ -41,26 +41,25 @@ export const WordRound = ({
 
   const speechLang = React.useContext(SpeechContext);
 
-  const sayIt = React.useCallback(() => {
+  const sayItRef = React.useRef<() => void>(() => {});
+  sayItRef.current = () => {
     window.speechSynthesis.cancel();
     const msg = new SpeechSynthesisUtterance(sayWord || targetWord);
     msg.voice =
       speechSynthesis
         .getVoices()
-        .find((voice) =>
-          voice.name.includes(speechLang || "English")
-        )!;
-    if (rate) {
-      msg.rate = rate;
-    }
+        .find((voice) => voice.name.includes(speechLang || "English"))!;
+    if (rate) msg.rate = rate;
     msg.lang = "en-UK";
     window.speechSynthesis.speak(msg);
-  }, [rate, sayWord, targetWord, speechLang]);
+  };
+
+  const sayIt = React.useCallback(() => sayItRef.current(), []);
 
   React.useEffect(() => {
-    sayIt();
+    sayItRef.current();
     return () => window.speechSynthesis.cancel();
-  }, [sayIt]);
+  }, [targetWord, sayWord]);
 
   React.useEffect(() => {
     const onKey = ({ key }: any) => {
