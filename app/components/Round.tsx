@@ -138,7 +138,7 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onResult
             </Tooltip>
             {strugglingWords.length > 0 && (
               <button
-                className="text-red-500 hover:text-red-700 flex items-center gap-1"
+                className="flex items-center gap-1 bg-red-50 border border-red-300 text-red-600 hover:bg-red-100 hover:border-red-400 rounded px-2 py-0.5 cursor-pointer"
                 onClick={() => setShowStrugglingModal(true)}
               >
                 <Tooltip text="Words you have failed 2 or more times. Click to see the list." align="right">
