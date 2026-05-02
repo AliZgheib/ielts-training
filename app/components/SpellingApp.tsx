@@ -105,6 +105,11 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
         <Round
           onSaveStruggling={(merged) => setMyWords(merged)}
           onExit={() => setPlaying(false)}
+          onPerfectRound={() => {
+            if (selectedSetId !== "my-words" && selectedSetId !== "all") {
+              markSetCompleted(selectedSetId);
+            }
+          }}
           onResult={(result) => {
             const sorted = Object.entries(result)
               .sort((a, b) => b[1].failedAttempts - a[1].failedAttempts)
@@ -112,10 +117,6 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
             setResults(sorted);
             const array = sorted.map((w) => w.word);
             setWords(array);
-            const hasErrors = sorted.some((w) => w.failedAttempts > 0);
-            if (!hasErrors && selectedSetId !== "my-words" && selectedSetId !== "all") {
-              markSetCompleted(selectedSetId);
-            }
             setPlaying(false);
           }}
           multiply={3}

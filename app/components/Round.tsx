@@ -71,10 +71,11 @@ export type RoundProps = {
   rate?: number;
   onSaveStruggling?: (words: string[]) => void;
   onExit: () => void;
+  onPerfectRound?: () => void;
   onResult: (result: Record<string, { failedAttempts: number }>) => void;
 };
 
-export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, onResult }: RoundProps) => {
+export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, onPerfectRound, onResult }: RoundProps) => {
   const totalTurns = words.length * multiply;
 
   const [wordStats, setWordStats] = React.useState(() =>
@@ -120,8 +121,11 @@ export const Round = ({ words, multiply, hints, rate, onSaveStruggling, onExit, 
     if (uniqueSeenCount === words.length && !finishedModalShownRef.current) {
       finishedModalShownRef.current = true;
       setShowFinishedModal(true);
+      if (blindFailCount === 0) {
+        onPerfectRound?.();
+      }
     }
-  }, [uniqueSeenCount, words.length]);
+  }, [uniqueSeenCount, words.length, blindFailCount, onPerfectRound]);
 
   const uniqueTotal = words.length;
   const totalAttempts = successCount + blindFailCount;
