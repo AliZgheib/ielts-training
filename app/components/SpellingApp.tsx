@@ -64,6 +64,29 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
     return JSON.parse(localStorage.getItem("ielts-my-list") || "[]");
   });
 
+  const [completedSets, setCompletedSets] = React.useState<Set<string>>(() => {
+    if (typeof window === "undefined") return new Set();
+    return new Set(JSON.parse(localStorage.getItem("ielts-completed-sets") || "[]"));
+  });
+
+  const markSetCompleted = (id: string) => {
+    setCompletedSets((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      localStorage.setItem("ielts-completed-sets", JSON.stringify([...next]));
+      return next;
+    });
+  };
+
+  const unmarkSetCompleted = (id: string) => {
+    setCompletedSets((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      localStorage.setItem("ielts-completed-sets", JSON.stringify([...next]));
+      return next;
+    });
+  };
+
   if (dictate) {
     return (
       <SpeechContext.Provider value={voice}>
@@ -89,6 +112,10 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
             setResults(sorted);
             const array = sorted.map((w) => w.word);
             setWords(array);
+            const hasErrors = sorted.some((w) => w.failedAttempts > 0);
+            if (!hasErrors && selectedSetId !== "my-words" && selectedSetId !== "all") {
+              markSetCompleted(selectedSetId);
+            }
             setPlaying(false);
           }}
           multiply={3}
@@ -147,15 +174,21 @@ export const SpellingApp = ({ mode }: SpellingAppProps) => {
                   .filter((s) => s.category === cat)
                   .map((s) => (
                     <option key={s.id} value={s.id}>
-                      {s.name} ({s.words.length} words)
+                      {completedSets.has(s.id) ? "\u2705 " : ""}{s.name} ({s.words.length} words)
                     </option>
                   ))}
               </optgroup>
             ))}
           </select>
+          {completedSets.has(selectedSetId) && (
+            <button
+              className="mt-1 text-xs text-gray-500 hover:text-red-500 transition"
+              onClick={() => unmarkSetCompleted(selectedSetId)}
+            >
+              Clear completion mark
+            </button>
+          )}
         </div>
-
-        {/* Speech Rate */}
         <div className="mx-[10px] mb-2 w-[250px]">
           <label className="text-sm block mb-1">Speech Rate: {spellingRate}</label>
           <input
