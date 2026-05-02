@@ -233,12 +233,12 @@ export const wordSets: WordSet[] = [
   },
 
   // ==========================================
-  // MAP & DIRECTIONS
+  // DIRECTIONS & LOCATION
   // ==========================================
   {
     id: "maps",
-    name: "Maps & Directions",
-    category: "IELTS Skills",
+    name: "Directions & Location",
+    category: "Places",
     words: [
       "above", "adjacent", "adjoining", "alongside", "behind", "below",
       "beneath", "beside", "between", "beyond", "corner", "corridor",
@@ -356,6 +356,10 @@ export const wordSets: WordSet[] = [
       "advertisement", "enthusiasm", "hierarchy", "miniature",
       "miscellaneous", "occasionally", "particularly", "peculiar",
       "responsibility", "schedule", "surveillance",
+      "application", "appointment", "cancellation", "complaint",
+      "confirmation", "destination", "enquiry", "equipment",
+      "identification", "luggage", "membership", "nationality",
+      "occupation", "qualification", "recommendation", "signature",
     ],
   },
 
@@ -465,17 +469,16 @@ export const wordSets: WordSet[] = [
   },
 
   {
-    id: "form-filling",
-    name: "Form Filling (Section 1)",
-    category: "IELTS Skills",
+    id: "ment-suffix",
+    name: "-ment Suffix (keep the e)",
+    category: "Spelling Practice",
     words: [
-      "luggage", "insurance", "appointment", "membership", "registration",
-      "reference", "extension", "maintenance", "equipment", "cancellation",
-      "confirmation", "signature", "identification", "application",
-      "occupation", "nationality", "destination", "accommodation",
-      "reservation", "certificate", "receipt", "deposit", "refund",
-      "deadline", "enquiry", "complaint", "guarantee", "assessment",
-      "arrangement", "recommendation", "qualification", "advertisement",
+      "achievement", "acknowledgement", "advertisement", "agreement",
+      "amazement", "amusement", "announcement", "arrangement",
+      "engagement", "encouragement", "enforcement", "enhancement",
+      "excitement", "improvement", "involvement", "management", "measurement", "movement",
+      "placement", "replacement", "requirement", "retirement",
+      "settlement", "statement",
     ],
   },
 
