@@ -209,7 +209,7 @@ export const wordSets: WordSet[] = [
       "ceiling", "chimney", "condominium", "corridor", "dormitory", "duplex",
       "fence", "flat", "floor", "furniture", "garage", "garden", "hallway",
       "house", "kitchen", "landlord", "lease", "microwave", "mortgage",
-      "neighborhood", "oven", "refrigerator", "rent", "sofa", "storey",
+      "neighborhood", "oven", "refrigerator", "rent", "sofa", "story",
       "suburb", "tenant",
     ],
   },
